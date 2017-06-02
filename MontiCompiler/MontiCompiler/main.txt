@@ -1,0 +1,14 @@
+ int 20a = 10;
+float b = 2.;
+char c = "ccccc";
+char _s_;
+void main()
+{
+/*Comentario*
+if(_s_ == "hola")
+c = "sasas"
+}  
+ 
+ 
+ 
+ 
