@@ -1,4 +1,2 @@
-4Indentificador no reconocido 1 holas. <Lex>
-Se esperaba un float 1 .. <Lex>
-Se esperaba un float 1 .. <Lex>
-Se esperaba un float 1 .  <Lex>
+2Se esperaba un float 2 2.; <Lex>
+Comentario no cerrado al final del archivo 7 /* <Lex>

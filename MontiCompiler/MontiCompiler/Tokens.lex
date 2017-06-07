@@ -1,1 +1,1 @@
-1holas ID 
+22int Keyword 20 Int a ID = Asignation 10 Int ; Delimiter float Keyword b ID = Asignation char ID c ID = Asignation ccccc Const_Af ; Delimiter char ID _s_ ID ; Delimiter void Keyword main Keyword ( Op_Agrup_Op ) CL_Agrup_Op { Op_Agrup_Op 
