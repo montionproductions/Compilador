@@ -27,6 +27,14 @@
 *.lib
 
 # Executables
-*.exe
 *.out
 *.app
+
+# Visual C++ cache files
+ipch/
+*.aps
+*.ncb
+*.opendb
+*.opensdf
+*.sdf
+*.cachefile
