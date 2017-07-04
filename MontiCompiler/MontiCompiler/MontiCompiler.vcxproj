@@ -130,12 +130,17 @@
   <ItemGroup>
     <ClCompile Include="ErrorController.cpp" />
     <ClCompile Include="FSM.cpp" />
+    <ClCompile Include="GlobalNode.cpp" />
+    <ClCompile Include="LocalNode.cpp" />
     <ClCompile Include="MyForm.cpp" />
     <ClCompile Include="TokenController.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EnumNodes.h" />
     <ClInclude Include="ErrorController.h" />
     <ClInclude Include="FSM.h" />
+    <ClInclude Include="GlobalNode.h" />
+    <ClInclude Include="LocalNode.h" />
     <ClInclude Include="MyForm.h">
       <FileType>CppForm</FileType>
     </ClInclude>
