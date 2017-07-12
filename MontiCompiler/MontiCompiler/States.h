@@ -58,3 +58,26 @@ namespace Descriptores
 		
 	};
 }
+
+namespace IDToken
+{
+	enum E
+	{
+		ID,
+		KEYWORD,
+		INT,
+		FLOAT,
+		DELIMITER,
+		RELATIONSHIP_OP,
+		ASSIGNATION,
+		ARITMETIC_OP,
+		O_AGRUP_OP,
+		C_AGRUP_OP,
+		LOGICAL_OP,
+		CONST_AF,
+		PROCEDURE,
+		PARAM,
+		BLOCK
+
+	};
+}

@@ -133,6 +133,7 @@
     <ClCompile Include="GlobalNode.cpp" />
     <ClCompile Include="LocalNode.cpp" />
     <ClCompile Include="MyForm.cpp" />
+    <ClCompile Include="SymbolManager.cpp" />
     <ClCompile Include="TokenController.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +146,7 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="States.h" />
+    <ClInclude Include="SymbolManager.h" />
     <ClInclude Include="TokenController.h" />
   </ItemGroup>
   <ItemGroup>

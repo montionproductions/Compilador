@@ -1,8 +1,9 @@
 #include "TokenController.h"
-
+#include "States.h"
 
 TokenController::TokenController()
 {
+	indexToken = 0;
 }
 
 
@@ -44,7 +45,7 @@ bool TokenController::Load()
 			std::string type;
 			myfile >> desc >> type;
 
-			AddToken(desc, type);
+			AddToken(desc, type, IDToken::ID);
 		}
 
 		myfile.close();
@@ -59,15 +60,50 @@ void TokenController::PrintTokens()
 		std::cout << "Token " << token.Type << ": " << token.Desc << std::endl;
 }
 
-void TokenController::AddToken(std::string Desc, std::string Type)
+void TokenController::AddToken(std::string Desc, std::string Type, IDToken::E id)
 {
 	Token token;
+	token.ID = id;
 	token.Desc = Desc;
 	token.Type = Type;
-	m_lTokens.push_back(token);
+
+	std::vector<Token>::iterator it = m_lTokens.end();
+	m_lTokens.insert(it, token);
 }
 
 void TokenController::Clean()
 {
 	m_lTokens.clear();
+}
+
+int TokenController::GetSize()
+{
+	return m_lTokens.size();
+}
+
+Token TokenController::NextToken()
+{
+	if(m_lTokens.size() > indexToken)
+		return m_lTokens[indexToken++];
+	else
+	{
+		printf("No hay mas tokens");
+		return m_lTokens.back();
+	}
+}
+
+Token TokenController::PreviousToken()
+{
+	if(indexToken > 0)
+		return m_lTokens[--indexToken];
+	else
+	{
+		printf("Final token\n");
+		return m_lTokens.back();
+	}
+}
+
+Token TokenController::GetToken(int index)
+{
+	return m_lTokens[index];
 }

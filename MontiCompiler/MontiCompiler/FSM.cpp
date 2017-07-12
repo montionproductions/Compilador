@@ -144,7 +144,7 @@ void FSM::LexicalAnalysis()
 				Token += pts;
 			else if (desc == Descriptores::Undef || desc == Descriptores::Point)
 			{
-				TokenManagment.AddToken(Token, "ID");
+				TokenManagment.AddToken(Token, "ID", IDToken::ID);
 				ErrorManagment.AddError(nLine, "<Lex>", "Indentificador no reconocido", Token + pts);
 				memset(&Token, 0, sizeof(Token));
 				state = State::DEFAULT;
@@ -155,9 +155,9 @@ void FSM::LexicalAnalysis()
 					Token == "bool" || Token == "function" || Token == "procedure" || Token == "main"||
 					Token == "for" || Token == "while" || Token == "if" || Token == "else" || Token == "switch"||
 					Token == "default" || Token == "print" || Token == "read" || Token == "return" || Token == "void")
-					TokenManagment.AddToken(Token, "Keyword");
+					TokenManagment.AddToken(Token, "Keyword", IDToken::KEYWORD);
 				else
-					TokenManagment.AddToken(Token, "ID");
+					TokenManagment.AddToken(Token, "ID", IDToken::ID);
 				memset(&Token, 0, sizeof(Token));
 				
 				m_String--;
@@ -184,7 +184,7 @@ void FSM::LexicalAnalysis()
 			}
 			else
 			{
-				TokenManagment.AddToken(Token, "Int");
+				TokenManagment.AddToken(Token, "Int", IDToken::INT);
 				memset(&Token, 0, sizeof(Token));
 				m_String--;
 				state = State::DEFAULT;
@@ -204,7 +204,7 @@ void FSM::LexicalAnalysis()
 			} 
 			else
 			{
-				TokenManagment.AddToken(Token, "Float");
+				TokenManagment.AddToken(Token, "Float", IDToken::FLOAT);
 				memset(&Token, 0, sizeof(Token));
 				m_String--;
 				state = State::DEFAULT;
@@ -213,7 +213,7 @@ void FSM::LexicalAnalysis()
 		break;
 		case State::DELIMITER:
 		{
-			TokenManagment.AddToken(Token, "Delimiter");
+			TokenManagment.AddToken(Token, "Delimiter", IDToken::DELIMITER);
 			m_String--;
 			memset(&Token, 0, sizeof(Token));
 			state = State::DEFAULT;
@@ -232,14 +232,14 @@ void FSM::LexicalAnalysis()
 			if (desc == Descriptores::Equal)
 			{
 				Token += pts;
-				TokenManagment.AddToken(Token, "Relationship_Op");
+				TokenManagment.AddToken(Token, "Relationship_Op", IDToken::RELATIONSHIP_OP);
 				memset(&Token, 0, sizeof(Token));
 				state = State::DEFAULT;
 
 			}
 			else
 			{
-				TokenManagment.AddToken(Token, "Asignation");
+				TokenManagment.AddToken(Token, "Asignation", IDToken::ASSIGNATION);
 				m_String--;
 				memset(&Token, 0, sizeof(Token));
 				state = State::DEFAULT;
@@ -252,7 +252,7 @@ void FSM::LexicalAnalysis()
 		{
 			if (pts != '*')
 			{
-				TokenManagment.AddToken(Token, "Aritmetic_Op");
+				TokenManagment.AddToken(Token, "Aritmetic_Op", IDToken::ARITMETIC_OP);
 				m_String--;
 				memset(&Token, 0, sizeof(Token));
 				state = State::DEFAULT;
@@ -268,7 +268,7 @@ void FSM::LexicalAnalysis()
 
 		case State::OP_AGRUPATION_OP:
 		{
-			TokenManagment.AddToken(Token, "Op_Agrup_Op");
+			TokenManagment.AddToken(Token, "Op_Agrup_Op", IDToken::O_AGRUP_OP);
 			m_String--;
 			memset(&Token, 0, sizeof(Token));
 			state = State::DEFAULT;
@@ -277,7 +277,7 @@ void FSM::LexicalAnalysis()
 
 		case State::CL_AGRUPATION_OP:
 		{
-			TokenManagment.AddToken(Token, "CL_Agrup_Op");
+			TokenManagment.AddToken(Token, "CL_Agrup_Op", IDToken::C_AGRUP_OP);
 			m_String--;
 			memset(&Token, 0, sizeof(Token));
 			state = State::DEFAULT;
@@ -305,9 +305,9 @@ void FSM::LexicalAnalysis()
 				m_String--;
 
 			if(Token == "!")
-				TokenManagment.AddToken(Token, "Logical_Op");
+				TokenManagment.AddToken(Token, "Logical_Op", IDToken::LOGICAL_OP);
 			else
-				TokenManagment.AddToken(Token, "Relationship_Op");
+				TokenManagment.AddToken(Token, "Relationship_Op", IDToken::RELATIONSHIP_OP);
 
 			memset(&Token, 0, sizeof(Token));
 			state = State::DEFAULT;
@@ -320,7 +320,7 @@ void FSM::LexicalAnalysis()
 			if (pts == '&' || pts == '|')
 			{
 				Token += pts;
-				TokenManagment.AddToken(Token, "Logical_Op");
+				TokenManagment.AddToken(Token, "Logical_Op", IDToken::LOGICAL_OP);
 			}
 			else
 				ErrorManagment.AddError(nLine, "<Lex>", "Se esperaba un operador logico", Token);
@@ -337,7 +337,7 @@ void FSM::LexicalAnalysis()
 
 			if (pts == '"')
 			{
-				TokenManagment.AddToken(Token, "Const_Af");
+				TokenManagment.AddToken(Token, "Const_Af", IDToken::CONST_AF);
 				memset(&Token, 0, sizeof(Token));
 				state = State::DEFAULT;
 				openConstAf = false;
@@ -376,6 +376,139 @@ void FSM::LexicalAnalysis()
 
 	ErrorManagment.PrintErrors();
 	TokenManagment.PrintTokens();
+}
+
+void FSM::SintacticalAnalisis()
+{
+	Token target;
+
+	Category::E Context = Category::Global;
+
+	/*std::vector<CGlobalNode> vGlobals;
+	std::vector<CLocalNode> vLocals;
+	std::vector<CLocalNode> vParams;*/
+
+	Type::E type = Type::FLOAT;
+
+	while (TokenManagment.GetSize() > 0)
+	{
+		target = TokenManagment.NextToken();
+		switch (target.ID)
+		{
+		case IDToken::ID:
+			break;
+		case IDToken::KEYWORD:
+		{
+			if (target.Desc == "var")
+			{
+				int firstPoint = TokenManagment.indexToken;
+				target = TokenManagment.NextToken();
+
+				int lastPoint = 0;
+
+				while (target.Desc != ";")
+				{
+					lastPoint = TokenManagment.indexToken;
+					target = TokenManagment.NextToken();
+				}
+
+				lastPoint--;
+				target = TokenManagment.GetToken(lastPoint);
+				if (target.Desc == "float")
+					type = Type::FLOAT;
+				else if (target.Desc == "int")
+					type = Type::INT;
+				else
+					ErrorManagment.AddError(0, "<sint>", target.Desc,"Se esperaba un tipo valido");
+
+				target = TokenManagment.GetToken(firstPoint);
+				TokenManagment.indexToken = firstPoint + 1;
+
+				while (target.Desc != ":" && target.Desc != ";")
+				{
+					if (target.ID == IDToken::ID)
+					{
+						std::string name;
+						int dimension = 0;
+
+						name = target.Desc;
+
+						target = TokenManagment.NextToken();
+
+						if (target.Desc == ",")
+						{
+							if (Context == Category::Global)
+								SymboolManager.AddVar(name, "", Category::Global, type, 0, NULL, NULL);
+						}
+						else
+						{
+							if (target.Desc == "[")
+								target = TokenManagment.NextToken();
+							else
+								ErrorManagment.AddError(0, "<sint>", target.Desc, "Elemento no identificado");
+
+							if (target.ID == IDToken::INT)
+							{
+								dimension = atoi(target.Desc.c_str());
+								target = TokenManagment.NextToken();
+							}
+							else
+								ErrorManagment.AddError(0, "<sint>", target.Desc, "Dimension no valida");
+
+							if (target.Desc == "]")
+								target = TokenManagment.NextToken();
+							else
+								ErrorManagment.AddError(0, "<sint>", target.Desc, "Debes cerrar el corchete");
+						
+							if (target.Desc == ":")
+								target = TokenManagment.NextToken();
+							else
+								ErrorManagment.AddError(0, "<sint>", target.Desc, "Falta :");
+
+							if (target.Desc == "float" || target.Desc == "int")
+								ErrorManagment.AddError(0, "<sint>", target.Desc, "Se esperaba un tipo valido");
+
+							if (Context == Category::Global)
+								SymboolManager.AddVar(name, "", Category::Global, type, dimension, NULL, NULL);
+
+						}
+						
+					}
+
+					target = TokenManagment.NextToken();
+				}
+				
+			}
+			else if (target.Desc == "procedure")
+			{
+				//falta implementacion
+			}
+		}
+			break;
+		case IDToken::INT:
+			break;
+		case IDToken::FLOAT:
+			break;
+		case IDToken::DELIMITER:
+			break;
+		case IDToken::RELATIONSHIP_OP:
+			break;
+		case IDToken::ASSIGNATION:
+			break;
+		case IDToken::ARITMETIC_OP:
+			break;
+		case IDToken::O_AGRUP_OP:
+			break;
+		case IDToken::C_AGRUP_OP:
+			break;
+		case IDToken::LOGICAL_OP:
+			break;
+		case IDToken::CONST_AF:
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 Descriptores::E FSM::CheckDescriptor(char character)

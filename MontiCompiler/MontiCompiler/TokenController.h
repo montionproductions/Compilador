@@ -7,11 +7,15 @@
 
 #include <iostream>
 #include <fstream>
+#include "States.h"
+#include "EnumNodes.h"
 
 struct Token
 {
 	std::string Desc;
 	std::string Type;
+
+	IDToken::E ID;
 };
 class TokenController
 {
@@ -23,9 +27,16 @@ public:
 	bool Load();
 
 	void PrintTokens();
-	void AddToken(std::string Desc, std::string Type);
+	void AddToken(std::string Desc, std::string Type, IDToken::E id);
 
 	void Clean();
+
+	int GetSize();
+	int indexToken;
+	Token NextToken();
+	Token PreviousToken();
+
+	Token GetToken(int index);
 private:
 	std::vector<Token> m_lTokens;
 };

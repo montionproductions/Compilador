@@ -1,1 +1,18 @@
+var x,w[5] : float;
+var y : int;
+
+procedure xy()
+{
+   var x,s : int;
+}
+
+fuction volC(x, radio : float) : float
+{
+  var s: float;
+}
+
+main()
+{
+
+} 
  

@@ -7,7 +7,7 @@ public:
 	CGlobalNode();
 	~CGlobalNode();
 
-	char* m_name;
+	std::string m_name;
 	Category::E m_category;
 	Type::E m_type;
 	unsigned int m_iDimension;

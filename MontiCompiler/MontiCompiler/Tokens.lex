@@ -1,1 +1,1 @@
-2asdadsv ID l ID 
+46var Keyword x ID , Delimiter w ID [ Op_Agrup_Op 5 Int ] CL_Agrup_Op : Delimiter float Keyword ; Delimiter procedure Keyword xy ID ( Op_Agrup_Op ) CL_Agrup_Op { Op_Agrup_Op var Keyword x ID , Delimiter s ID : Delimiter int Keyword ; Delimiter } CL_Agrup_Op fuction ID volC ID ( Op_Agrup_Op x ID , Delimiter radio ID : Delimiter float Keyword ) CL_Agrup_Op : Delimiter float Keyword { Op_Agrup_Op var Keyword s ID : Delimiter float Keyword ; Delimiter } CL_Agrup_Op main Keyword ( Op_Agrup_Op ) CL_Agrup_Op { Op_Agrup_Op } CL_Agrup_Op 

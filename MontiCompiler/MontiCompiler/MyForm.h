@@ -224,7 +224,12 @@ namespace MontiCompiler {
 		Compiler.SetString((char*)(void*)Marshal::StringToHGlobalAnsi(this->richTextBox1->Text));
 		Compiler.ErrorManagment.Clean();
 		Compiler.TokenManagment.Clean();
+		// Lexical Analisis
 		Compiler.LexicalAnalysis();
+
+		// Sintactical Analisis
+		Compiler.SintacticalAnalisis();
+
 		Compiler.ErrorManagment.Save();
 		Compiler.TokenManagment.Save();
 		this->richTextBox2->Text = L"";

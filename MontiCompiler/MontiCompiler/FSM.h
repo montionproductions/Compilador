@@ -7,6 +7,10 @@
 #include "ErrorController.h"
 #include "TokenController.h"
 
+#include "LocalNode.h"
+#include "GlobalNode.h"
+#include "SymbolManager.h"
+
 class FSM
 {
 public:
@@ -16,11 +20,13 @@ public:
 
 	void SetString(char *String);
 	void LexicalAnalysis();
+	void SintacticalAnalisis();
 
 	Descriptores::E CheckDescriptor(char character);
 
 	CErrorController ErrorManagment;
 	TokenController TokenManagment;
+	CSymbolManager SymboolManager;
 
 	bool Save(std::string file_name);
 	bool Load(std::string file_name);

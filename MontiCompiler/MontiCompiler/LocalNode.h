@@ -1,5 +1,7 @@
 #pragma once
 #include "EnumNodes.h"
+#include <string>
+
 class CLocalNode
 {
 public:
@@ -9,7 +11,7 @@ public:
 	Category::E m_category;
 	Type::E m_type;
 	unsigned int m_iDimention;
-	char* m_context_name;
+	std::string m_context_name;
 	CLocalNode *ptrLocal;
 	CLocalNode *ptrNext;
 };

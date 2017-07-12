@@ -4,7 +4,8 @@ namespace Type
 	enum E
 	{
 		FLOAT,
-		INt
+		INT,
+		INDEF
 	};
 }
 
