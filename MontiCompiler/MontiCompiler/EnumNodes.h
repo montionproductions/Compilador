@@ -16,6 +16,8 @@ namespace Category
 		Global,
 		Local,
 		Param,
-		Indef
+		Indef,
+		Process,
+		Function
 	};
 }

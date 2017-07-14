@@ -33,6 +33,8 @@ public:
 
 	std::string m_formatString;
 private:
+
+	void Var(Token &target, Category::E Context, std::string FunctionName);
 	char pts;
 	int m_iLine;
 

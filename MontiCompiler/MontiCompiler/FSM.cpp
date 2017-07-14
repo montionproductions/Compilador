@@ -3,6 +3,7 @@
 
 FSM::FSM()
 {
+	SymboolManager.SetControllers(&ErrorManagment, &TokenManagment);
 	m_iLine = 0;
 }
 
@@ -389,8 +390,9 @@ void FSM::SintacticalAnalisis()
 	std::vector<CLocalNode> vParams;*/
 
 	Type::E type = Type::FLOAT;
+	std::string functionName = "";
 
-	while (TokenManagment.GetSize() > 0)
+	while (TokenManagment.GetSize() > TokenManagment.indexToken)
 	{
 		target = TokenManagment.NextToken();
 		switch (target.ID)
@@ -401,87 +403,202 @@ void FSM::SintacticalAnalisis()
 		{
 			if (target.Desc == "var")
 			{
-				int firstPoint = TokenManagment.indexToken;
+				target = TokenManagment.NextToken();
+				Var(target, Context, functionName);
+			}
+			else if (target.Desc == "procedure" && functionName == "")
+			{
+				//Procedimiento
+				
+				Context = Category::Param;
+				std::string name;
+
 				target = TokenManagment.NextToken();
 
-				int lastPoint = 0;
-
-				while (target.Desc != ";")
+				if (target.ID == IDToken::ID)
 				{
-					lastPoint = TokenManagment.indexToken;
+					name = target.Desc;
+					target = TokenManagment.NextToken();
+					SymboolManager.AddVar(name, "", Category::Process, Type::INDEF, 0, nullptr, nullptr);
+				}
+				else
+					ErrorManagment.AddError(0, "<sint>", target.Desc, "Se espetaba un ID");
+
+
+				//Parametros
+				if (target.Desc == "(")
+					target = TokenManagment.NextToken();
+				else
+					ErrorManagment.AddError(0, "<sint>", target.Desc, "Se espetaba un (");
+
+				
+				while (target.Desc != ")")
+				{
+					Var(target, Context, name);
+					if(target.Desc != ")")
+						target = TokenManagment.NextToken();
+				}
+
+				target = TokenManagment.NextToken();
+				//Block
+				if (target.Desc != "{")
+				{
+					ErrorManagment.AddError(0, "<sint>", target.Desc, "Se esperaba un {");
+					target = TokenManagment.NextToken();
+					if (target.ID == IDToken::KEYWORD)
+					{
+						Context = Category::Local;
+						functionName = name;
+						TokenManagment.indexToken -= 2;
+					}
+
+				} else if (target.Desc == "{" || target.ID == IDToken::KEYWORD)
+				{
+					Context = Category::Local;
+					functionName = name;
+				}
+				else
+				{
+					TokenManagment.PanicMode("}");
+				}
+
+				
+				//falta implementacion
+			}
+			else if (target.Desc == "function" && functionName == "")
+			{
+				//Funcion
+				Context = Category::Param;
+				std::string name;
+
+				target = TokenManagment.NextToken();
+
+				if (target.ID == IDToken::ID)
+				{
+					name = target.Desc;
+					target = TokenManagment.NextToken();	
+				}
+				else
+					ErrorManagment.AddError(0, "<sint>", target.Desc, "Se espetaba un ID");
+
+				int first = TokenManagment.indexToken;
+
+				while (target.Desc != ")")
+				{
 					target = TokenManagment.NextToken();
 				}
 
-				lastPoint--;
-				target = TokenManagment.GetToken(lastPoint);
+				target = TokenManagment.NextToken();
+				target = TokenManagment.NextToken();
+
 				if (target.Desc == "float")
 					type = Type::FLOAT;
 				else if (target.Desc == "int")
 					type = Type::INT;
 				else
-					ErrorManagment.AddError(0, "<sint>", target.Desc,"Se esperaba un tipo valido");
+					ErrorManagment.AddError(0, "<sint>", target.Desc, "Se esperaba un tipo válido");
 
-				target = TokenManagment.GetToken(firstPoint);
-				TokenManagment.indexToken = firstPoint + 1;
+				SymboolManager.AddVar(name, "", Category::Function, type, 0, nullptr, nullptr);
 
-				while (target.Desc != ":" && target.Desc != ";")
+				TokenManagment.indexToken = first - 1;
+				target = TokenManagment.NextToken();
+
+
+				//Parametros
+				if (target.Desc == "(")
+					target = TokenManagment.NextToken();
+				else
+					ErrorManagment.AddError(0, "<sint>", target.Desc, "Se espetaba un (");
+
+
+				while (target.Desc != ")")
 				{
-					if (target.ID == IDToken::ID)
-					{
-						std::string name;
-						int dimension = 0;
-
-						name = target.Desc;
-
+					Var(target, Context, name);
+					if (target.Desc != ")")
 						target = TokenManagment.NextToken();
+				}
 
-						if (target.Desc == ",")
-						{
-							if (Context == Category::Global)
-								SymboolManager.AddVar(name, "", Category::Global, type, 0, NULL, NULL);
-						}
-						else
-						{
-							if (target.Desc == "[")
-								target = TokenManagment.NextToken();
-							else
-								ErrorManagment.AddError(0, "<sint>", target.Desc, "Elemento no identificado");
+				target = TokenManagment.NextToken();
 
-							if (target.ID == IDToken::INT)
-							{
-								dimension = atoi(target.Desc.c_str());
-								target = TokenManagment.NextToken();
-							}
-							else
-								ErrorManagment.AddError(0, "<sint>", target.Desc, "Dimension no valida");
+				if (target.Desc == ":")
+					target = TokenManagment.NextToken();
+				else
+					ErrorManagment.AddError(0, "<sint>", target.Desc, "Se esperaba un :");
 
-							if (target.Desc == "]")
-								target = TokenManagment.NextToken();
-							else
-								ErrorManagment.AddError(0, "<sint>", target.Desc, "Debes cerrar el corchete");
-						
-							if (target.Desc == ":")
-								target = TokenManagment.NextToken();
-							else
-								ErrorManagment.AddError(0, "<sint>", target.Desc, "Falta :");
+				if (target.ID == IDToken::KEYWORD)
+					target = TokenManagment.NextToken();
+				else
+					ErrorManagment.AddError(0, "<sint>", target.Desc, "Se esperaba un tipo válido");
 
-							if (target.Desc == "float" || target.Desc == "int")
-								ErrorManagment.AddError(0, "<sint>", target.Desc, "Se esperaba un tipo valido");
+				//Block
 
-							if (Context == Category::Global)
-								SymboolManager.AddVar(name, "", Category::Global, type, dimension, NULL, NULL);
-
-						}
-						
+				if (target.Desc != "{")
+				{
+					ErrorManagment.AddError(0, "<sint>", target.Desc, "Se esperaba un {");
+					target = TokenManagment.NextToken();
+					if (target.ID == IDToken::KEYWORD)
+					{
+						Context = Category::Local;
+						functionName = name;
+						TokenManagment.indexToken -= 2;
 					}
 
-					target = TokenManagment.NextToken();
 				}
-				
+				else if (target.Desc == "{" || target.ID == IDToken::KEYWORD)
+				{
+					Context = Category::Local;
+					functionName = name;
+				}
+				else
+				{
+					TokenManagment.PanicMode("}");
+				}
+
 			}
-			else if (target.Desc == "procedure")
+			else if (target.Desc == "return")
 			{
-				//falta implementacion
+				target = TokenManagment.NextToken();
+				if (target.ID == IDToken::KEYWORD)
+				{
+					if (target.Desc == "float")
+						type = Type::FLOAT;
+					else if (target.Desc == "int")
+						type = Type::INT;
+					else
+						ErrorManagment.AddError(0, "<sint>", target.Desc, "Se esperaba un tipo compatible");
+				}
+				target = TokenManagment.NextToken();
+			}
+			else if (target.Desc == "main")
+			{
+				std::string name = "main";
+				target = TokenManagment.NextToken();
+				target = TokenManagment.NextToken();
+				target = TokenManagment.NextToken();
+
+				//Block
+
+				if (target.Desc != "{")
+				{
+					ErrorManagment.AddError(0, "<sint>", target.Desc, "Se esperaba un {");
+					target = TokenManagment.NextToken();
+					if (target.ID == IDToken::KEYWORD)
+					{
+						Context = Category::Local;
+						functionName = name;
+						TokenManagment.indexToken -= 2;
+					}
+
+				}
+				else if (target.Desc == "{" || target.ID == IDToken::KEYWORD)
+				{
+					Context = Category::Local;
+					functionName = name;
+				}
+				else
+				{
+					TokenManagment.PanicMode("}");
+				}
 			}
 		}
 			break;
@@ -500,6 +617,10 @@ void FSM::SintacticalAnalisis()
 		case IDToken::O_AGRUP_OP:
 			break;
 		case IDToken::C_AGRUP_OP:
+		{
+			Context = Category::Global;
+			functionName = "";
+		}
 			break;
 		case IDToken::LOGICAL_OP:
 			break;
@@ -700,6 +821,110 @@ bool FSM::Load(std::string file_name)
 	myfile.close();
 
 	return true;
+}
+
+void FSM::Var(Token &target, Category::E Context, std::string FunctionName)
+{
+	Type::E type;
+	int firstPoint = TokenManagment.indexToken - 1;
+
+	int lastPoint = 0;
+
+	while (target.Desc != ";" && target.Desc != ")")
+	{
+		/*if (target.Desc == ")")
+		{
+			TokenManagment.indexToken -= 1;
+			return;
+		}*/
+		lastPoint = TokenManagment.indexToken;
+		target = TokenManagment.NextToken();
+	}
+
+	lastPoint--;
+	target = TokenManagment.GetToken(lastPoint);
+	if (target.Desc == "float")
+		type = Type::FLOAT;
+	else if (target.Desc == "int")
+		type = Type::INT;
+	else
+		ErrorManagment.AddError(0, "<sint>", target.Desc, "Se esperaba un tipo valido");
+
+	target = TokenManagment.GetToken(firstPoint);
+	TokenManagment.indexToken = firstPoint + 1;
+
+	while (target.Desc != ":" && target.Desc != ";" && target.Desc != ")")
+	{
+		if (target.ID == IDToken::ID)
+		{
+			std::string name;
+			int dimension = 0;
+
+			name = target.Desc;
+
+			target = TokenManagment.NextToken();
+
+			if (target.Desc == "," || target.Desc == ":")
+			{
+				SymboolManager.AddVar(name, FunctionName, Context, type, 0, NULL, NULL);
+				if (target.Desc == ")")
+					return;
+			}
+			else if (Context == Category::Global || Context == Category::Process || Context == Category::Function)
+			{
+				if (target.Desc == "[")
+					target = TokenManagment.NextToken();
+				else
+					ErrorManagment.AddError(0, "<sint>", target.Desc, "Elemento no identificado");
+
+				if (target.ID == IDToken::INT)
+				{
+					dimension = atoi(target.Desc.c_str());
+					target = TokenManagment.NextToken();
+				}
+				else
+					ErrorManagment.AddError(0, "<sint>", target.Desc, "Dimension no valida");
+
+				if (target.Desc == "]")
+					target = TokenManagment.NextToken();
+				else
+					ErrorManagment.AddError(0, "<sint>", target.Desc, "Debes cerrar el corchete");
+
+				if (target.Desc == ":")
+					target = TokenManagment.NextToken();
+				else
+					ErrorManagment.AddError(0, "<sint>", target.Desc, "Falta :");
+
+				if (target.Desc != "float" && target.Desc != "int")
+					ErrorManagment.AddError(0, "<sint>", target.Desc, "Se esperaba un tipo valido");
+
+				SymboolManager.AddVar(name, FunctionName, Context, type, dimension, NULL, NULL);
+
+			}
+			else
+			{
+				Token a, b, c;
+				a = target;
+				target = TokenManagment.NextToken();
+				b = target;
+				target = TokenManagment.NextToken();
+				c = target;
+				target = TokenManagment.NextToken();
+				
+				if (a.Desc == "[" || b.ID == Type::INT || c.Desc == "]")
+				{
+					ErrorManagment.AddError(0, "<sint>", target.Desc, "Los parámetro no pueden tener dimension");
+					target = TokenManagment.PanicMode(";");
+					return;
+				}
+				else
+					TokenManagment.indexToken -= 2;
+			}
+
+		}
+
+		target = TokenManagment.NextToken();
+	}
 }
 
 void FSM::Clean()

@@ -1,18 +1,14 @@
-var x,w[5] : float;
-var y : int;
-
-procedure xy()
+procedure xy(b[9] : int; a : float)
 {
-   var x,s : int;
+	var g : float;
 }
 
-fuction volC(x, radio : float) : float
+function sum(x,h : float) : float
 {
-  var s: float;
+	var l : int;
+	return 0.0;
 }
 
 main()
 {
-
 } 
- 

@@ -103,7 +103,18 @@ Token TokenController::PreviousToken()
 	}
 }
 
+Token TokenController::PanicMode(std::string element)
+{
+	Token aux = NextToken();
+	while (aux.Desc != element)
+	{
+		aux = NextToken();
+	}
+	return aux;
+}
+
 Token TokenController::GetToken(int index)
 {
+	indexToken = index;
 	return m_lTokens[index];
 }

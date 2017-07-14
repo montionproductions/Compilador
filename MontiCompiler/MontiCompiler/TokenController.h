@@ -36,6 +36,8 @@ public:
 	Token NextToken();
 	Token PreviousToken();
 
+	Token PanicMode(std::string element);
+
 	Token GetToken(int index);
 private:
 	std::vector<Token> m_lTokens;
