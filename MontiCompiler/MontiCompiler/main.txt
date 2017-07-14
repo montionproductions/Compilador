@@ -1,14 +1,21 @@
+int hola;
+
 procedure xy(b[9] : int; a : float)
+0
+ var g : float;
+while(a 6)
 {
-	var g : float;
+ var o : int;
+}
 }
 
 function sum(x,h : float) : float
 {
-	var l : int;
-	return 0.0;
+ var l : int;
+ return 0.0;
 }
 
 main()
 {
-} 
+}  
+ 

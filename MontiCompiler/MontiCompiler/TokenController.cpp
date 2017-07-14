@@ -45,7 +45,7 @@ bool TokenController::Load()
 			std::string type;
 			myfile >> desc >> type;
 
-			AddToken(desc, type, IDToken::ID);
+			AddToken(desc, type, IDToken::ID, 0);
 		}
 
 		myfile.close();
@@ -60,12 +60,13 @@ void TokenController::PrintTokens()
 		std::cout << "Token " << token.Type << ": " << token.Desc << std::endl;
 }
 
-void TokenController::AddToken(std::string Desc, std::string Type, IDToken::E id)
+void TokenController::AddToken(std::string Desc, std::string Type, IDToken::E id, int nLine)
 {
 	Token token;
 	token.ID = id;
 	token.Desc = Desc;
 	token.Type = Type;
+	token.nLine = nLine;
 
 	std::vector<Token>::iterator it = m_lTokens.end();
 	m_lTokens.insert(it, token);

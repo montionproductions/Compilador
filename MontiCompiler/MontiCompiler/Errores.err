@@ -1,4 +1,3 @@
-4Expresion sin definicion 3 	 <Lex>
-Expresion sin definicion 8 	 <Lex>
-Expresion sin definicion 9 	 <Lex>
-: 0 Los parámetro no pueden tener dimension <sint>
+3int 1 Este elemento no es ninguno de los que se esperan <sint>
+b 3 Los parámetros no pueden tener dimension <sint>
+0 4 Se esperaba un { <sint>

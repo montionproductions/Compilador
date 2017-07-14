@@ -16,6 +16,7 @@ struct Token
 	std::string Type;
 
 	IDToken::E ID;
+	int nLine;
 };
 class TokenController
 {
@@ -27,7 +28,7 @@ public:
 	bool Load();
 
 	void PrintTokens();
-	void AddToken(std::string Desc, std::string Type, IDToken::E id);
+	void AddToken(std::string Desc, std::string Type, IDToken::E id, int nLine);
 
 	void Clean();
 
