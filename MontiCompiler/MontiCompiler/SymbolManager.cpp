@@ -91,3 +91,29 @@ void CSymbolManager::SetControllers(CErrorController *errorManager, TokenControl
 	TokenManagment = tokenManager;
 }
 
+bool CSymbolManager::Save()
+{
+	std::ofstream myfile;
+
+	myfile.open("Simbolos.symb", std::ios::binary);
+	if (myfile.is_open())
+	{
+		myfile << HashMap.size() << " ";
+
+		for (auto token : HashMap)
+		{
+			myfile << token.second->GetInfo() << "           ";
+		}
+
+		myfile.close();
+	}
+	else
+		return true;
+}
+
+void CSymbolManager::Reset()
+{
+	TokenManagment->indexToken = 0;
+	HashMap.clear();
+}
+

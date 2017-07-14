@@ -20,6 +20,10 @@ public:
 	bool FindElement(std::string name);
 
 	void SetControllers(CErrorController *errorManager, TokenController *tokenManager);
+
+	bool Save();
+
+	void Reset();
 private:
 	CErrorController *ErrorManagment;
 	TokenController *TokenManagment;

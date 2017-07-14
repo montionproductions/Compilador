@@ -560,16 +560,18 @@ void FSM::SintacticalAnalisis()
 			else if (target.Desc == "return")
 			{
 				target = TokenManagment.NextToken();
-				if (target.ID == IDToken::KEYWORD)
-				{
-					if (target.Desc == "float")
-						type = Type::FLOAT;
-					else if (target.Desc == "int")
-						type = Type::INT;
-					else
-						ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba un tipo compatible");
-				}
+				Type::E t;
+				if (target.ID == IDToken::FLOAT)
+					t = Type::FLOAT;
+				else if (target.ID == IDToken::INT)
+					t = Type::INT;
+				else
+					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba un tipo compatible");
+				if(t != type)
+					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "El tipo de retorno no es el mismo");
 				target = TokenManagment.NextToken();
+				if (target.Desc != ";")
+					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba un ;");
 			}
 			else if (target.Desc == "main")
 			{
@@ -632,7 +634,8 @@ void FSM::SintacticalAnalisis()
 
 				for (int a = 0; a < aux.size() - 2; a+=2)
 				{
-					if (((aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT) && aux[a + 1].ID == IDToken::RELATIONSHIP_OP && (aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT)))
+					if (((aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT) && aux[a + 1].ID == IDToken::RELATIONSHIP_OP && (aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT))
+						|| ((aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT) && aux[a + 1].ID == IDToken::ARITMETIC_OP && (aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT)))
 					{
 
 					}
@@ -711,6 +714,8 @@ void FSM::SintacticalAnalisis()
 			break;
 		}
 	}
+
+	SymboolManager.Save();
 }
 
 Descriptores::E FSM::CheckDescriptor(char character)

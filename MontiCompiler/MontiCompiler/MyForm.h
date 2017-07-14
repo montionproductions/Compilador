@@ -224,6 +224,7 @@ namespace MontiCompiler {
 		Compiler.SetString((char*)(void*)Marshal::StringToHGlobalAnsi(this->richTextBox1->Text));
 		Compiler.ErrorManagment.Clean();
 		Compiler.TokenManagment.Clean();
+		Compiler.SymboolManager.Reset();
 		// Lexical Analisis
 		Compiler.LexicalAnalysis();
 
@@ -278,6 +279,7 @@ private: System::Void toolStripButton1_Click(System::Object^  sender, System::Ev
 	Compiler.SetString((char*)(void*)Marshal::StringToHGlobalAnsi(this->richTextBox1->Text));
 	Compiler.ErrorManagment.Clean();
 	Compiler.TokenManagment.Clean();
+	Compiler.SymboolManager.Reset();
 	Compiler.LexicalAnalysis();
 	Compiler.ErrorManagment.Save();
 	Compiler.TokenManagment.Save();

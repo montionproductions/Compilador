@@ -1,17 +1,12 @@
-﻿  ErrorController.cpp
-  FSM.cpp
+﻿  FSM.cpp
 FSM.cpp(21): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\ucrt\stdio.h(1772): note: vea la declaración de 'sprintf'
-FSM.cpp(633): warning C4018: '<': no coinciden signed/unsigned
+FSM.cpp(635): warning C4018: '<': no coinciden signed/unsigned
   GlobalNode.cpp
   LocalNode.cpp
   MyForm.cpp
   SymbolManager.cpp
-  TokenController.cpp
-TokenController.cpp(87): warning C4018: '>': no coinciden signed/unsigned
   Generando código...
-d:\this pc\documentos\work\sextocuatri\compiladores\compiler\monticompiler\monticompiler\tokencontroller.cpp(31): warning C4715: 'TokenController::Save': no todas las rutas de acceso de control devuelven un valor
-d:\this pc\documentos\work\sextocuatri\compiladores\compiler\monticompiler\monticompiler\tokencontroller.cpp(55): warning C4715: 'TokenController::Load': no todas las rutas de acceso de control devuelven un valor
-d:\this pc\documentos\work\sextocuatri\compiladores\compiler\monticompiler\monticompiler\fsm.cpp(884): warning C4715: 'FSM::Save': no todas las rutas de acceso de control devuelven un valor
-d:\this pc\documentos\work\sextocuatri\compiladores\compiler\monticompiler\monticompiler\errorcontroller.cpp(30): warning C4715: 'CErrorController::Save': no todas las rutas de acceso de control devuelven un valor
+d:\this pc\documentos\work\sextocuatri\compiladores\compiler\monticompiler\monticompiler\symbolmanager.cpp(112): warning C4715: 'CSymbolManager::Save': no todas las rutas de acceso de control devuelven un valor
+d:\this pc\documentos\work\sextocuatri\compiladores\compiler\monticompiler\monticompiler\fsm.cpp(889): warning C4715: 'FSM::Save': no todas las rutas de acceso de control devuelven un valor
   MontiCompiler.vcxproj -> D:\This PC\Documentos\Work\SextoCuatri\Compiladores\Compiler\MontiCompiler\Release\MontiCompiler.exe

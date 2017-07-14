@@ -1,16 +1,17 @@
 int hola;
+var k, l, p, no[89], pp[0.9] : float;
 
 procedure xy(b[9] : int; a : float)
 0
  var g : float;
-while(a 6)
+while(a + 6 < 2)
 {
  var o : int;
 }
 }
 
 function sum(x,h : float) : float
-{
+0
  var l : int;
  return 0.0;
 }
@@ -18,4 +19,5 @@ function sum(x,h : float) : float
 main()
 {
 }  
+ 
  

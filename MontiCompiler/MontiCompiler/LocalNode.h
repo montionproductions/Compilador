@@ -14,5 +14,7 @@ public:
 	std::string m_context_name;
 	CLocalNode *ptrLocal;
 	CLocalNode *ptrNext;
+
+	std::string GetInfo();
 };
 

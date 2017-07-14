@@ -14,5 +14,7 @@ public:
 	void *ptrVar;
 	CLocalNode *ptrLocal;
 	CGlobalNode *ptrNext;
+
+	std::string GetInfo();
 };
 

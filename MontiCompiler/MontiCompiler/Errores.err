@@ -1,3 +1,2 @@
-3int 1 Este elemento no es ninguno de los que se esperan <sint>
-b 3 Los parámetros no pueden tener dimension <sint>
-0 4 Se esperaba un { <sint>
+2, 0 Falta : <sint>
+, 0 Se esperaba un tipo valido <sint>
