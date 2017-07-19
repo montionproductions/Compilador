@@ -28,6 +28,7 @@ namespace Descriptores
 	{
 		Undef,
 		Space,
+		Tap,
 		EndLine, // \n
 		Letter, // a,b,c...z
 		Digit, // 0,1,2...9

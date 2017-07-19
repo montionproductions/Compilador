@@ -73,6 +73,7 @@ void FSM::LexicalAnalysis()
 				break;
 
 			case Descriptores::Space:
+			case Descriptores::Tap:
 				state = State::SPACE;
 				break;
 
@@ -153,7 +154,7 @@ void FSM::LexicalAnalysis()
 			else
 			{
 				if(Token == "float" || Token == "int" || Token == "var" || Token == "string" ||
-					Token == "bool" || Token == "function" || Token == "procedure" || Token == "main"||
+					Token == "boolean" || Token == "function" || Token == "procedure" || Token == "main"||
 					Token == "for" || Token == "while" || Token == "if" || Token == "else" || Token == "switch"||
 					Token == "default" || Token == "print" || Token == "read" || Token == "return" || Token == "void")
 					TokenManagment.AddToken(Token, "Keyword", IDToken::KEYWORD, nLine);
@@ -632,19 +633,29 @@ void FSM::SintacticalAnalisis()
 						aux.push_back(target);
 				}
 
-				for (int a = 0; a < aux.size() - 2; a+=2)
+				if (aux.size() > 3)
 				{
-					if (((aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT) && aux[a + 1].ID == IDToken::RELATIONSHIP_OP && (aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT))
-						|| ((aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT) && aux[a + 1].ID == IDToken::ARITMETIC_OP && (aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT)))
+					for (int a = 0; a < aux.size() - 2; a += 2)
 					{
+						if (((aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT) && aux[a + 1].ID == IDToken::RELATIONSHIP_OP && (aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT))
+							|| ((aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT) && aux[a + 1].ID == IDToken::ARITMETIC_OP && (aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT)))
+						{
+
+						}
+						else
+							ErrorManagment.AddError(target.nLine, "<sint>", aux[a].Desc, "Expresion no válida");
 
 					}
-					else
-						ErrorManagment.AddError(target.nLine, "<sint>", aux[a].Desc, "Expresion no válida");
-						
 				}
-
-				if(aux.size() < 3)
+				else if (aux.size() > 1)
+				{
+					if (aux[0].ID == IDToken::LOGICAL_OP)
+					{
+					}
+					else
+						ErrorManagment.AddError(target.nLine, "<sint>", aux[0].Desc, "Expresion no válida");
+				}
+				else
 					ErrorManagment.AddError(target.nLine, "<sint>", aux[0].Desc, "Expresion no válida");
 
 				target = TokenManagment.NextToken();
@@ -674,6 +685,81 @@ void FSM::SintacticalAnalisis()
 			}
 			else if (target.Desc == "for" && functionName != "")
 			{
+
+			}
+			else if (target.Desc == "if" && functionName != "")
+			{
+				std::string name = functionName;
+				target = TokenManagment.NextToken();
+				if (target.Desc == "(")
+					target = TokenManagment.NextToken();
+				else
+					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba (");
+
+				if (target.ID != IDToken::ID || target.ID != IDToken::INT || target.ID != IDToken::FLOAT)
+				{
+					TokenManagment.indexToken -= 1;
+				}
+				else
+					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba una expresion");
+
+				std::vector<Token> aux;
+				while (target.Desc != ")")
+				{
+					target = TokenManagment.NextToken();
+					if (target.Desc != ")")
+						aux.push_back(target);
+				}
+
+				if (aux.size() > 3)
+				{
+					for (int a = 0; a < aux.size() - 2; a += 2)
+					{
+						if (((aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT) && aux[a + 1].ID == IDToken::RELATIONSHIP_OP && (aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT))
+							|| ((aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT) && aux[a + 1].ID == IDToken::ARITMETIC_OP && (aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT)))
+						{
+
+						}
+						else
+							ErrorManagment.AddError(target.nLine, "<sint>", aux[a].Desc, "Expresion no válida");
+
+					}
+				}
+				else if (aux.size() > 1)
+				{
+					if (aux[0].ID == IDToken::LOGICAL_OP)
+					{
+					}
+					else
+						ErrorManagment.AddError(target.nLine, "<sint>", aux[0].Desc, "Expresion no válida");
+				}
+				else
+					ErrorManagment.AddError(target.nLine, "<sint>", aux[0].Desc, "Expresion no válida");
+
+				target = TokenManagment.NextToken();
+				//Block
+
+				if (target.Desc != "{")
+				{
+					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba un {");
+					target = TokenManagment.NextToken();
+					if (target.ID == IDToken::KEYWORD)
+					{
+						Context = Category::Local;
+						functionName = name;
+						TokenManagment.indexToken -= 2;
+					}
+
+				}
+				else if (target.Desc == "{" || target.ID == IDToken::KEYWORD)
+				{
+					Context = Category::Local;
+					functionName = name;
+				}
+				else
+				{
+					TokenManagment.PanicMode("}");
+				}
 
 			}
 			else
@@ -804,6 +890,7 @@ Descriptores::E FSM::CheckDescriptor(char character)
 		return Descriptores::Point;
 
 	case ' ':
+	case '	':
 		return Descriptores::Space;
 
 	case '\n':
@@ -918,11 +1005,6 @@ void FSM::Var(Token &target, Category::E Context, std::string FunctionName)
 
 	while (target.Desc != ";" && target.Desc != ")")
 	{
-		/*if (target.Desc == ")")
-		{
-			TokenManagment.indexToken -= 1;
-			return;
-		}*/
 		lastPoint = TokenManagment.indexToken;
 		target = TokenManagment.NextToken();
 	}
@@ -933,8 +1015,12 @@ void FSM::Var(Token &target, Category::E Context, std::string FunctionName)
 		type = Type::FLOAT;
 	else if (target.Desc == "int")
 		type = Type::INT;
+	else if (target.Desc == "string")
+		type = Type::STRING;
+	else if (target.Desc == "boolean")
+		type = Type::STRING;
 	else
-		ErrorManagment.AddError(0, "<sint>", target.Desc, "Se esperaba un tipo valido");
+		ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba un tipo valido");
 
 	target = TokenManagment.GetToken(firstPoint);
 	TokenManagment.indexToken = firstPoint + 1;
@@ -961,7 +1047,7 @@ void FSM::Var(Token &target, Category::E Context, std::string FunctionName)
 				if (target.Desc == "[")
 					target = TokenManagment.NextToken();
 				else
-					ErrorManagment.AddError(0, "<sint>", target.Desc, "Elemento no identificado");
+					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Elemento no identificado");
 
 				if (target.ID == IDToken::INT)
 				{
@@ -969,20 +1055,20 @@ void FSM::Var(Token &target, Category::E Context, std::string FunctionName)
 					target = TokenManagment.NextToken();
 				}
 				else
-					ErrorManagment.AddError(0, "<sint>", target.Desc, "Dimension no valida");
+					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Dimension no valida");
 
 				if (target.Desc == "]")
 					target = TokenManagment.NextToken();
 				else
-					ErrorManagment.AddError(0, "<sint>", target.Desc, "Debes cerrar el corchete");
+					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Debes cerrar el corchete");
 
 				if (target.Desc == ":")
 					target = TokenManagment.NextToken();
 				else
-					ErrorManagment.AddError(0, "<sint>", target.Desc, "Falta :");
+					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Falta :");
 
-				if (target.Desc != "float" && target.Desc != "int")
-					ErrorManagment.AddError(0, "<sint>", target.Desc, "Se esperaba un tipo valido");
+				if (target.Desc != "float" && target.Desc != "int" && target.Desc != "string" && target.Desc != "boolean")
+					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba un tipo valido");
 
 				SymboolManager.AddVar(name, FunctionName, Context, type, dimension, NULL, NULL);
 

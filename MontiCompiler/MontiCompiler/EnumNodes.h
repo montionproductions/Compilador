@@ -5,6 +5,8 @@ namespace Type
 	{
 		FLOAT,
 		INT,
+		STRING,
+		BOOLEAN,
 		INDEF
 	};
 }
