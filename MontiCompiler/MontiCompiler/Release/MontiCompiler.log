@@ -1,7 +1,10 @@
 ﻿  FSM.cpp
 FSM.cpp(21): warning C4996: 'sprintf': This function or variable may be unsafe. Consider using sprintf_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
   C:\Program Files (x86)\Windows Kits\10\Include\10.0.15063.0\ucrt\stdio.h(1772): note: vea la declaración de 'sprintf'
-FSM.cpp(635): warning C4018: '<': no coinciden signed/unsigned
-FSM.cpp(703): warning C4018: '<': no coinciden signed/unsigned
-d:\this pc\documentos\work\sextocuatri\compiladores\compiler\monticompiler\monticompiler\fsm.cpp(954): warning C4715: 'FSM::Save': no todas las rutas de acceso de control devuelven un valor
+FSM.cpp(996): warning C4018: '<': no coinciden signed/unsigned
+  MyForm.cpp
+  SymbolManager.cpp
+  Generando código...
+d:\this pc\documentos\work\sextocuatri\compiladores\compiler\monticompiler\monticompiler\symbolmanager.cpp(113): warning C4715: 'CSymbolManager::Save': no todas las rutas de acceso de control devuelven un valor
+d:\this pc\documentos\work\sextocuatri\compiladores\compiler\monticompiler\monticompiler\fsm.cpp(822): warning C4715: 'FSM::Save': no todas las rutas de acceso de control devuelven un valor
   MontiCompiler.vcxproj -> D:\This PC\Documentos\Work\SextoCuatri\Compiladores\Compiler\MontiCompiler\Release\MontiCompiler.exe

@@ -10,7 +10,7 @@ CSymbolManager::~CSymbolManager()
 {
 }
 
-void CSymbolManager::AddVar(std::string name, std::string functionName, Category::E category, Type::E type, int dimension, CLocalNode *ptrLocal, CGlobalNode * ptrGlobal)
+void CSymbolManager::AddVar(Token target, std::string name, std::string functionName, Category::E category, Type::E type, int dimension, CLocalNode *ptrLocal, CGlobalNode * ptrGlobal)
 {
 	CGlobalNode *global = new CGlobalNode();
 	CLocalNode *local = new CLocalNode();
@@ -69,7 +69,7 @@ void CSymbolManager::AddVar(std::string name, std::string functionName, Category
 	else
 	{
 		if (category == Category::Global || category == Category::Process)
-			ErrorManagment->AddError(0, "<sint>", name, "Redefinición de variable");
+			ErrorManagment->AddError(target.nLine, "<sint>", name, "Redefinición de variable");
 		else if(category == Category::Param)
 		{
 

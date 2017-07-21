@@ -288,12 +288,14 @@ void FSM::LexicalAnalysis()
 
 		case State::COMMENT:
 		{
-			if ((Token[Token.size()-1] == '*') && (pts == '/'))
+			if ((Token[Token.size() - 1] == '*') && (pts == '/'))
 			{
 				memset(&Token, 0, sizeof(Token));
 				state = State::DEFAULT;
 				openComment = false;
-			} 
+			}
+			else if (pts == '\n')
+				nLine++;
 			else
 				Token += pts;
 		}
@@ -426,7 +428,7 @@ void FSM::SintacticalAnalisis()
 				{
 					name = target.Desc;
 					target = TokenManagment.NextToken();
-					SymboolManager.AddVar(name, "", Category::Process, Type::INDEF, 0, nullptr, nullptr);
+					SymboolManager.AddVar(target, name, "", Category::Process, Type::INDEF, 0, nullptr, nullptr);
 					functionName = name;
 				}
 				else
@@ -488,7 +490,7 @@ void FSM::SintacticalAnalisis()
 				else
 					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba un tipo válido");
 
-				SymboolManager.AddVar(name, "", Category::Function, type, 0, nullptr, nullptr);
+				SymboolManager.AddVar(target, name, "", Category::Function, type, 0, nullptr, nullptr);
 
 				TokenManagment.indexToken = first - 1;
 				target = TokenManagment.NextToken();
@@ -882,7 +884,7 @@ void FSM::Var(Token &target, Category::E Context, std::string FunctionName)
 
 			if (target.Desc == "," || target.Desc == ":")
 			{
-				SymboolManager.AddVar(name, FunctionName, Context, type, 0, NULL, NULL);
+				SymboolManager.AddVar(target, name, FunctionName, Context, type, 0, NULL, NULL);
 				if (target.Desc == ")")
 					return;
 			}
@@ -914,7 +916,7 @@ void FSM::Var(Token &target, Category::E Context, std::string FunctionName)
 				if (target.Desc != "float" && target.Desc != "int" && target.Desc != "string" && target.Desc != "boolean")
 					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba un tipo valido");*/
 
-				SymboolManager.AddVar(name, FunctionName, Context, type, dimension, NULL, NULL);
+				SymboolManager.AddVar(target, name, FunctionName, Context, type, dimension, NULL, NULL);
 
 			}
 			else

@@ -16,7 +16,7 @@ public:
 	CSymbolManager();
 	~CSymbolManager();
 
-	void AddVar(std::string name, std::string functionName, Category::E category, Type::E type, int dimension, CLocalNode *ptrLocal, CGlobalNode * ptrGlobal);
+	void AddVar(Token target, std::string name, std::string functionName, Category::E category, Type::E type, int dimension, CLocalNode *ptrLocal, CGlobalNode * ptrGlobal);
 	bool FindElement(std::string name);
 
 	void SetControllers(CErrorController *errorManager, TokenController *tokenManager);
