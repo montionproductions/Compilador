@@ -98,11 +98,12 @@ bool CSymbolManager::Save()
 	myfile.open("Simbolos.symb", std::ios::binary);
 	if (myfile.is_open())
 	{
-		myfile << HashMap.size() << " ";
+		myfile << HashMap.size() << ' ';
 
 		for (auto token : HashMap)
 		{
-			myfile << token.second->GetInfo() << "           ";
+			token.second->Save(&myfile);
+			myfile << ' ';
 		}
 
 		myfile.close();

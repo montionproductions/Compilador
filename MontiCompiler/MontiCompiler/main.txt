@@ -1,61 +1,5 @@
-/* ********************
-    VARIABLES GLOBALES
-   ********************/
-var a,	b,  c123 :int;
-var b1, c12, a: float;
-
-
-/* Este es un procedimiento */
 procedure		myproc (x,y:int; z:string){
-    var firstvar :			boolean;
-	var z : int;
-	var w : int;
-	var a : float;
-	
-	firstvar = secondvar;
-	if(!firstvar)
-	{
-	    secondvar = secondvar*3.0;
-	}
-	
-	z = 100;;;
-	
-	if 9 (z + 3)
-	{
-	    w = 1
-	}
-	
-	while (z + 2 {
-	    w = 2;
-	}
-	
-	if z + 2)
-	{
-	    w = 3;
-	}
-	
-	while z + 2
-	{
-	    w = 5;
-	}
-	
-	if (z 2)
-	{
-	    w == 4;
-	}
-	
-	while (z > 1)
-	{
-	}
-	
-	if (){
-	}	
-	
-	while ) z > 10 )
-	{
-	}
-	
-	if((((x + y + 3) - 1) > 5))
+  if((((x + y + 3) - 1) > 5))
 	{
 	    w = 10;
 	}
@@ -63,4 +7,12 @@ procedure		myproc (x,y:int; z:string){
 	while (z < 1)
 	{
 	}}
+	
 }
+ 
+ 
+ 
+ 
+ 
+ 
+ 

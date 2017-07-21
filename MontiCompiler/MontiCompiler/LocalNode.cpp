@@ -11,17 +11,20 @@ CLocalNode::~CLocalNode()
 {
 }
 
-std::string CLocalNode::GetInfo()
+void CLocalNode::Save(std::ofstream * file)
 {
-	std::string info;
-	info = m_category + ',';
-	info += m_type + ',';
-	info += m_context_name + ',';
-	info += m_iDimention + ',';
-	if(ptrLocal != nullptr)
-		info += ptrLocal->GetInfo() + ",";
-	if (ptrNext != nullptr)
-		info += ptrNext->GetInfo() + ",";
+	*file << m_category << ',';
+	*file << m_type << ',';
+	*file << m_context_name << ',';
+	*file << m_iDimention << ',';
+	if (ptrLocal != nullptr)
+		ptrLocal->Save(file);
+	else
+		*file << "null,";
 
-	return info;
+	if (ptrNext != nullptr)
+		ptrNext->Save(file);
+	else
+		*file << "null";
+
 }

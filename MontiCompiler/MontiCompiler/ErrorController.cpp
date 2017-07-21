@@ -39,13 +39,16 @@ void CErrorController::PrintErrors()
 
 void CErrorController::AddError(int line, std::string type, std::string desc, std::string text)
 {
-	Error newError;
-	newError.line = line;
-	newError.type = type;
-	newError.desc = desc;
-	newError.text = text;
+	if (m_lErrors.size() < 10)
+	{
+		Error newError;
+		newError.line = line;
+		newError.type = type;
+		newError.desc = desc;
+		newError.text = text;
 
-	m_lErrors.push_back(newError);
+		m_lErrors.push_back(newError);
+	}
 }
 
 void CErrorController::Clean()

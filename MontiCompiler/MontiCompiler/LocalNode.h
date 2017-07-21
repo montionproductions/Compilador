@@ -1,6 +1,7 @@
 #pragma once
 #include "EnumNodes.h"
 #include <string>
+#include <fstream>
 
 class CLocalNode
 {
@@ -15,6 +16,6 @@ public:
 	CLocalNode *ptrLocal;
 	CLocalNode *ptrNext;
 
-	std::string GetInfo();
+	void Save(std::ofstream *file);
 };
 

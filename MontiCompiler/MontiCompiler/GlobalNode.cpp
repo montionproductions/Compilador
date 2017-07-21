@@ -11,17 +11,20 @@ CGlobalNode::~CGlobalNode()
 {
 }
 
-std::string CGlobalNode::GetInfo()
+void CGlobalNode::Save(std::ofstream *file)
 {
-	std::string info;
-	info = m_name + ",";
-	info += m_category + ',';
-	info += m_type + ',';
-	info += m_iDimension + ',';
-	info += "null,";
-	if(ptrLocal != nullptr)
-		info += ptrLocal->GetInfo() + ",";
+	*file << m_name << ',';
+	*file << m_category << ',';
+	*file << m_type << ',';
+	*file << m_iDimension << ',';
+	*file << "null,";
+	if (ptrLocal != nullptr)
+		ptrLocal->Save(file);
+	else
+		*file << "null,";
 	if (ptrNext != nullptr)
-		info += ptrNext->GetInfo() + ",";
-	return info;
+		ptrNext->Save(file);
+	else
+		*file << "null";
+
 }

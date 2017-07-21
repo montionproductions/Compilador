@@ -401,6 +401,9 @@ void FSM::SintacticalAnalisis()
 		switch (target.ID)
 		{
 		case IDToken::ID:
+		{
+			Assign(target, Context, functionName);
+		}
 			break;
 		case IDToken::KEYWORD:
 		{
@@ -415,6 +418,7 @@ void FSM::SintacticalAnalisis()
 				
 				Context = Category::Param;
 				std::string name;
+				
 
 				target = TokenManagment.NextToken();
 
@@ -423,6 +427,7 @@ void FSM::SintacticalAnalisis()
 					name = target.Desc;
 					target = TokenManagment.NextToken();
 					SymboolManager.AddVar(name, "", Category::Process, Type::INDEF, 0, nullptr, nullptr);
+					functionName = name;
 				}
 				else
 					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se espetaba un ID");
@@ -444,29 +449,7 @@ void FSM::SintacticalAnalisis()
 
 				target = TokenManagment.NextToken();
 				//Block
-				if (target.Desc != "{")
-				{
-					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba un {");
-					target = TokenManagment.NextToken();
-					if (target.ID == IDToken::KEYWORD)
-					{
-						Context = Category::Local;
-						functionName = name;
-						TokenManagment.indexToken -= 2;
-					}
-
-				} else if (target.Desc == "{" || target.ID == IDToken::KEYWORD)
-				{
-					Context = Category::Local;
-					functionName = name;
-				}
-				else
-				{
-					TokenManagment.PanicMode("}");
-				}
-
-				
-				//falta implementacion
+				Block(target, Context, functionName);
 			}
 			else if (target.Desc == "function" && functionName == "")
 			{
@@ -498,6 +481,10 @@ void FSM::SintacticalAnalisis()
 					type = Type::FLOAT;
 				else if (target.Desc == "int")
 					type = Type::INT;
+				else if (target.Desc == "boolean")
+					type = Type::BOOLEAN;
+				else if (target.Desc == "string")
+					type = Type::STRING;
 				else
 					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba un tipo válido");
 
@@ -534,28 +521,8 @@ void FSM::SintacticalAnalisis()
 					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba un tipo válido");
 
 				//Block
-
-				if (target.Desc != "{")
-				{
-					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba un {");
-					target = TokenManagment.NextToken();
-					if (target.ID == IDToken::KEYWORD)
-					{
-						Context = Category::Local;
-						functionName = name;
-						TokenManagment.indexToken -= 2;
-					}
-
-				}
-				else if (target.Desc == "{" || target.ID == IDToken::KEYWORD)
-				{
-					Context = Category::Local;
-					functionName = name;
-				}
-				else
-				{
-					TokenManagment.PanicMode("}");
-				}
+				functionName = name;
+				Block(target, Context, functionName);
 
 			}
 			else if (target.Desc == "return")
@@ -581,29 +548,9 @@ void FSM::SintacticalAnalisis()
 				target = TokenManagment.NextToken();
 				target = TokenManagment.NextToken();
 
+				functionName = name;
 				//Block
-
-				if (target.Desc != "{")
-				{
-					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba un {");
-					target = TokenManagment.NextToken();
-					if (target.ID == IDToken::KEYWORD)
-					{
-						Context = Category::Local;
-						functionName = name;
-						TokenManagment.indexToken -= 2;
-					}
-
-				}
-				else if (target.Desc == "{" || target.ID == IDToken::KEYWORD)
-				{
-					Context = Category::Local;
-					functionName = name;
-				}
-				else
-				{
-					TokenManagment.PanicMode("}");
-				}
+				Block(target, Context, functionName);
 			}
 			else if (target.Desc == "while" && functionName != "")
 			{
@@ -611,160 +558,57 @@ void FSM::SintacticalAnalisis()
 				std::string name = functionName;
 
 				target = TokenManagment.NextToken();
-				
-				if (target.Desc == "(")
-					target = TokenManagment.NextToken();
-				else
-					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba un (");
-
-				if (target.ID != IDToken::ID || target.ID != IDToken::INT || target.ID != IDToken::FLOAT)
-				{
-					TokenManagment.indexToken -= 1;
-				}
-				else
-					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba una expresion");
-					
-
-				std::vector<Token> aux;
-				while (target.Desc != ")")
-				{
-					target = TokenManagment.NextToken();
-					if(target.Desc != ")")
-						aux.push_back(target);
-				}
-
-				if (aux.size() > 3)
-				{
-					for (int a = 0; a < aux.size() - 2; a += 2)
-					{
-						if (((aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT) && aux[a + 1].ID == IDToken::RELATIONSHIP_OP && (aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT))
-							|| ((aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT) && aux[a + 1].ID == IDToken::ARITMETIC_OP && (aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT)))
-						{
-
-						}
-						else
-							ErrorManagment.AddError(target.nLine, "<sint>", aux[a].Desc, "Expresion no válida");
-
-					}
-				}
-				else if (aux.size() > 1)
-				{
-					if (aux[0].ID == IDToken::LOGICAL_OP)
-					{
-					}
-					else
-						ErrorManagment.AddError(target.nLine, "<sint>", aux[0].Desc, "Expresion no válida");
-				}
-				else
-					ErrorManagment.AddError(target.nLine, "<sint>", aux[0].Desc, "Expresion no válida");
-
-				target = TokenManagment.NextToken();
+				//Expresion
+				Expresion(target, Context, name);
 				//Block
-
-				if (target.Desc != "{")
-				{
-					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba un {");
-					target = TokenManagment.NextToken();
-					if (target.ID == IDToken::KEYWORD)
-					{
-						Context = Category::Local;
-						functionName = name;
-						TokenManagment.indexToken -= 2;
-					}
-
-				}
-				else if (target.Desc == "{" || target.ID == IDToken::KEYWORD)
-				{
-					Context = Category::Local;
-					functionName = name;
-				}
-				else
-				{
-					TokenManagment.PanicMode("}");
-				}
+				Block(target, Context, name);
 			}
 			else if (target.Desc == "for" && functionName != "")
 			{
-
-			}
-			else if (target.Desc == "if" && functionName != "")
-			{
-				std::string name = functionName;
 				target = TokenManagment.NextToken();
 				if (target.Desc == "(")
 					target = TokenManagment.NextToken();
 				else
-					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba (");
+					ErrorManagment.AddError(target.nLine, "<sint>", "Se esperaba un (", target.Desc);
 
-				if (target.ID != IDToken::ID || target.ID != IDToken::INT || target.ID != IDToken::FLOAT)
-				{
-					TokenManagment.indexToken -= 1;
-				}
-				else
-					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba una expresion");
+				// Assig
+				Assign(target, Context, functionName);
 
-				std::vector<Token> aux;
-				while (target.Desc != ")")
-				{
+				if (target.Desc == ";")
 					target = TokenManagment.NextToken();
-					if (target.Desc != ")")
-						aux.push_back(target);
-				}
-
-				if (aux.size() > 3)
-				{
-					for (int a = 0; a < aux.size() - 2; a += 2)
-					{
-						if (((aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT) && aux[a + 1].ID == IDToken::RELATIONSHIP_OP && (aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT))
-							|| ((aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT) && aux[a + 1].ID == IDToken::ARITMETIC_OP && (aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT)))
-						{
-
-						}
-						else
-							ErrorManagment.AddError(target.nLine, "<sint>", aux[a].Desc, "Expresion no válida");
-
-					}
-				}
-				else if (aux.size() > 1)
-				{
-					if (aux[0].ID == IDToken::LOGICAL_OP)
-					{
-					}
-					else
-						ErrorManagment.AddError(target.nLine, "<sint>", aux[0].Desc, "Expresion no válida");
-				}
 				else
-					ErrorManagment.AddError(target.nLine, "<sint>", aux[0].Desc, "Expresion no válida");
+					ErrorManagment.AddError(target.nLine, "<sint>", "Se esperaba un ;", target.Desc);
 
-				target = TokenManagment.NextToken();
+				// Expresion
+				Expresion(target, Context, functionName);
+
+				// Expresion
+				Expresion(target, Context, functionName);
+
 				//Block
+				Block(target, Context, functionName);
 
-				if (target.Desc != "{")
-				{
-					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba un {");
+
+			}
+			else if (target.Desc == "if")
+			{
+				EnterFuncion = true;
+				target = TokenManagment.NextToken();
+				/*if (target.Desc == "(")
 					target = TokenManagment.NextToken();
-					if (target.ID == IDToken::KEYWORD)
-					{
-						Context = Category::Local;
-						functionName = name;
-						TokenManagment.indexToken -= 2;
-					}
-
-				}
-				else if (target.Desc == "{" || target.ID == IDToken::KEYWORD)
-				{
-					Context = Category::Local;
-					functionName = name;
-				}
 				else
-				{
-					TokenManagment.PanicMode("}");
-				}
+					ErrorManagment.AddError(target.nLine, "<sint>", "Se esperaba (", target.Desc);*/
+
+				//Expresion
+				Expresion(target, Context, functionName);
+				
+				//Block
+				Block(target, Context, functionName);
 
 			}
 			else
 			{
-				ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Este elemento no es ninguno de los que se esperan");
+				ErrorManagment.AddError(target.nLine, "<sint>", "Este elemento no es ninguno de los que se esperan", target.Desc);
 			}
 		}
 			break;
@@ -1062,13 +906,13 @@ void FSM::Var(Token &target, Category::E Context, std::string FunctionName)
 				else
 					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Debes cerrar el corchete");
 
-				if (target.Desc == ":")
+				/*if (target.Desc == ":")
 					target = TokenManagment.NextToken();
 				else
 					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Falta :");
 
 				if (target.Desc != "float" && target.Desc != "int" && target.Desc != "string" && target.Desc != "boolean")
-					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba un tipo valido");
+					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba un tipo valido");*/
 
 				SymboolManager.AddVar(name, FunctionName, Context, type, dimension, NULL, NULL);
 
@@ -1097,6 +941,148 @@ void FSM::Var(Token &target, Category::E Context, std::string FunctionName)
 
 		target = TokenManagment.NextToken();
 	}
+}
+
+void FSM::Expresion(Token & target, Category::E Context, std::string FunctionName)
+{
+	if (target.ID == IDToken::C_AGRUP_OP)
+	{
+		ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba un (");
+		target = TokenManagment.NextToken();
+		//return;
+	}
+
+	if (target.ID != IDToken::ID || target.ID != IDToken::INT || target.ID != IDToken::FLOAT || target.nLine != IDToken::LOGICAL_OP)
+	{
+		TokenManagment.indexToken -= 1;
+	}
+	else
+		ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "Se esperaba una expresion");
+
+
+	std::vector<Token> aux;
+	int exit = 1;
+	while (exit >= 1)
+	{
+		if (target.Desc == "(")
+			exit++;
+		else if (target.Desc == ")")
+			exit--;
+		else if (target.Desc == "{")
+		{
+			exit = 0;
+			TokenManagment.indexToken -= 1;
+			break;
+		}
+		target = TokenManagment.NextToken();
+		if (target.Desc != ")" && target.ID != IDToken::DELIMITER
+			&& target.ID != IDToken::O_AGRUP_OP
+			&& target.ID != IDToken::C_AGRUP_OP)
+			aux.push_back(target);
+	}
+
+	/*std::vector<Token> aux;
+	while (target.Desc != ")" && target.Desc != ";")
+	{
+		target = TokenManagment.NextToken();
+		if (target.Desc != ")" && target.Desc != "!" &&  target.Desc != ";")
+			aux.push_back(target);
+	}*/
+
+	if (aux.size() >= 3)
+	{
+		for (int a = 0; a < aux.size() - 2; a += 2)
+		{
+			if (
+				((aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT)
+				&& aux[a + 1].ID == IDToken::RELATIONSHIP_OP
+				&& (aux[a + 2].ID == IDToken::ID || aux[a + 2].ID == IDToken::INT || aux[a + 2].ID == IDToken::FLOAT))
+
+				|| ((aux[a].ID == IDToken::ID || aux[a].ID == IDToken::INT || aux[a].ID == IDToken::FLOAT)
+					&& aux[a + 1].ID == IDToken::ARITMETIC_OP
+					&& (aux[a + 2].ID == IDToken::ID || aux[a + 2].ID == IDToken::INT || aux[a + 2].ID == IDToken::FLOAT))
+				
+				|| (aux[a].ID == IDToken::ID
+					&& aux[a + 1].ID == IDToken::ARITMETIC_OP
+					&& aux[a + 2].ID == IDToken::ARITMETIC_OP))
+			{
+
+			}
+			else
+				ErrorManagment.AddError(target.nLine, "<sint>", "Expresion no válida", aux[a].Desc);
+
+		}
+	}
+	else if (aux.size() > 1)
+	{
+		if (aux[0].ID == IDToken::LOGICAL_OP)
+		{
+		}
+		else
+			ErrorManagment.AddError(target.nLine, "<sint>","Expresion no válida",aux[0].Desc);
+	}
+	else if (aux.size() == 1)
+	{
+		if (aux[0].ID == IDToken::ID)
+		{
+		}
+		else
+		{
+			ErrorManagment.AddError(target.nLine, "<sint>", "Expresion no válida", aux[0].Desc);
+		}
+
+	}
+	else {
+		ErrorManagment.AddError(target.nLine, "<sint>", "Expresion no válida", target.Desc);
+		TokenManagment.indexToken -= 1;
+		target = TokenManagment.PanicMode(")");
+	}
+
+	target = TokenManagment.NextToken();
+}
+
+void FSM::Block(Token & target, Category::E & Context, std::string FuctionName)
+{
+	if (target.Desc != "{")
+	{
+		ErrorManagment.AddError(target.nLine, "<sint>", "Se esperaba un {", target.Desc);
+		target = TokenManagment.NextToken();
+		if (target.ID == IDToken::KEYWORD)
+		{
+			Context = Category::Local;
+			TokenManagment.indexToken -= 2;
+		}
+
+	}
+	else if (target.Desc == "{" || target.ID == IDToken::KEYWORD)
+	{
+		Context = Category::Local;
+	}
+	else
+	{
+		TokenManagment.PanicMode("}");
+	}
+}
+
+void FSM::Assign(Token & target, Category::E & Context, std::string FuctionName)
+{
+	if (target.ID == IDToken::ID)
+		target = TokenManagment.NextToken();
+	else
+		ErrorManagment.AddError(target.nLine, "<sint>", "Se esperaba un ID", target.Desc);
+
+	if (target.ID == IDToken::ASSIGNATION)
+		target = TokenManagment.NextToken();
+	else
+		ErrorManagment.AddError(target.nLine, "<sint>", "Se esperaba un =", target.Desc);
+
+	if (target.ID == IDToken::INT)
+		target = TokenManagment.NextToken();
+	else
+		TokenManagment.PanicMode(";");
+	/*else
+		ErrorManagment.AddError(target.nLine, "<sint>", "Se esperaba un int o un ID", target.Desc);*/
+	
 }
 
 void FSM::Clean()

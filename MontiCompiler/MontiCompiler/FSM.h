@@ -35,6 +35,9 @@ public:
 private:
 
 	void Var(Token &target, Category::E Context, std::string FunctionName);
+	void Expresion(Token &target, Category::E Context, std::string FunctionName);
+	void Block(Token &target, Category::E &Context, std::string FuctionName);
+	void Assign(Token &target, Category::E &Context, std::string FuctionName);
 	char pts;
 	int m_iLine;
 

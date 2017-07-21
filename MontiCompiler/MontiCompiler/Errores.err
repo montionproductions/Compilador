@@ -1,11 +1,6 @@
-11a 0 Redefinición de variable <sint>
-if 21 Este elemento no es ninguno de los que se esperan <sint>
-while 26 Este elemento no es ninguno de los que se esperan <sint>
-if 30 Este elemento no es ninguno de los que se esperan <sint>
-while 35 Este elemento no es ninguno de los que se esperan <sint>
-if 40 Este elemento no es ninguno de los que se esperan <sint>
-while 45 Este elemento no es ninguno de los que se esperan <sint>
-if 49 Este elemento no es ninguno de los que se esperan <sint>
-while 52 Este elemento no es ninguno de los que se esperan <sint>
-if 56 Este elemento no es ninguno de los que se esperan <sint>
-while 61 Este elemento no es ninguno de los que se esperan <sint>
+6Se esperaba un = 3 : <sint>
+sumInt 0 Redefinición de variable <sint>
+Se esperaba un = 9 : <sint>
+9.5 21 Se esperaba un tipo valido <sint>
+Expresion no válida 30 c <sint>
+Expresion no válida 34 c <sint>
