@@ -1,1 +1,1 @@
-5 b1,0,0,0,null,null,null a,0,1,0,null,null,null b,0,1,0,null,null,null c123,0,1,0,null,null,null c12,0,0,0,null,null,null 
+4  {myproc,Process,Indef,0,null,null,null}   {x,Indef,Indef,0,null, {Param,Int,myproc,0,null,null} null}   {y,Indef,Indef,0,null, {Param,Int,myproc,0,null,null} null}   {z,Indef,Indef,0,null, {Param,String,myproc,0,null,null} null}  

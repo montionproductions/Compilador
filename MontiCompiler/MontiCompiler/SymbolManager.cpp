@@ -14,8 +14,11 @@ void CSymbolManager::AddVar(Token target, std::string name, std::string function
 {
 	CGlobalNode *global = new CGlobalNode();
 	CLocalNode *local = new CLocalNode();
+	
+	CGlobalNode *ptr;
+	ptr = FindElement(name);
 
-	if (!FindElement(name))
+	if (ptr == nullptr)
 	{
 		if (category == Category::Global || category == Category::Process || category == Category::Function)
 		{
@@ -74,15 +77,32 @@ void CSymbolManager::AddVar(Token target, std::string name, std::string function
 		{
 
 		}
+		else if (category == Category::Local)
+		{
+			if (ptr->ptrLocal == nullptr)
+			{
+				local->m_category = category;
+				local->m_type = type;
+				local->m_iDimention = dimension;
+				local->m_context_name = functionName;
+				local->ptrLocal = NULL;
+				local->ptrNext = NULL;
+				ptr->ptrLocal = local;
+			}
+			else
+				ErrorManagment->AddError(target.nLine, "<sint>", name, "Redefinición de variable");
+		}
 	}
 
 }
 
-bool CSymbolManager::FindElement(std::string name)
+CGlobalNode* CSymbolManager::FindElement(std::string name)
 {
-	if (HashMap.find(name) != HashMap.end())
-		return true;
-	return false;
+	std::unordered_map<std::string, CGlobalNode*>::iterator it;
+	it = HashMap.find(name);
+	if (it != HashMap.end())
+		return it->second;
+	return nullptr;
 }
 
 void CSymbolManager::SetControllers(CErrorController *errorManager, TokenController *tokenManager)

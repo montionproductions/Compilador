@@ -1,0 +1,169 @@
+/* ********************
+    VARIABLES GLOBALES
+   ********************/
+var a,	b,  c123 :int;
+var b1, c12, a: float; /* ERROR: variable 'a' ya definida globalmente */
+
+/* Este es un procedimiento */
+procedure		myproc (x,y:int; z:string){
+    var firstvar :	bool;
+	var z : int; /* ERROR: variable z ya definida como parametro */
+	var w : int;
+	var a : float;
+	
+	firstvar = secondvar;
+	if(!firstvar)
+	{
+	    secondvar = secondvar*3.0;
+	}
+	
+	if(firstvar && secondvar)
+	{
+	    z = (((((((((1)))))))));
+	}
+	
+	z = 100;;;
+	
+	if 9 (z + 3) /* ERROR: se esperaba '(' */
+	{
+	    w = 1 
+	} /* ERROR: se esperaba ';' */
+	
+	while (z + 2 { /* ERROR: se esperaba ')' */
+	    w = 2;
+	}
+	
+	if z + 2) /* ERROR: se esperaba '(' */
+	{
+	    w = 3;
+	}
+	
+	while z + 2 /* ERROR: se esperaba '('. ERROR: se esperaba ')' */
+	{
+	    w = 5;
+	}
+	
+	if (z 2) /* ERROR : se esperaba OPERADOR */
+	{
+	    w == 4; /* ERROR: se esperaba EXPR */
+	}
+	else
+	{
+	}
+	
+	if(a > 1)
+	else
+	{}
+	
+	while (z > 1)
+	{
+	}
+	
+	if (){
+	}	
+	
+	while ) z > 10 )
+	{
+	}
+	
+	if((((x + y + 3) - 1) > 5))
+	{
+	    w = 10;
+	}
+	
+	for(i = 0, (i < 10), i = i + 1)
+	{
+	    a = a + i;
+		
+		for(j = 0; j + a; )
+		{
+		}
+	}
+	
+	switch(id)
+	{
+        1 ; 
+        {
+		    var wrong : int;
+		    a = a * 10;
+        }		
+        default :
+		{
+		    a = a;
+		}
+		2 : 
+        {
+		    a = a / 10;
+        }		
+	}
+	
+	while (z < 1)
+	{
+	}}
+}
+
+var a2 : boolean;
+
+/* * calcula * el * factorial * */
+function facIter(x: int) : int
+{
+    if(x <= 1)
+	{
+	    return 1;
+	}
+	
+    return facIter(x-1);
+}
+
+function sumInt(x,y:int) : int
+{
+    result : int;
+	result = x + y;
+	result = (x+y);
+}
+
+procedure sumInt(x,y:int; e,f:float; g,h:string)
+{
+    result : int;
+	result = x + y;
+}
+
+procedure c123()
+{
+}
+
+/* 
+*/
+main()
+{
+   var b : float;
+   var c = 9.5;
+   
+   while( b > 3.0 )
+   {
+       if(c < 1.0)
+	   {
+	       while (b > 6.0)
+		   {
+		       if(c < -1.0)
+			   {
+			        while (b > 9.0)
+					{
+					    if(c < -10.0)
+						{
+						}
+					}
+			   }
+			   else
+			   {
+					while (b < 9.0)
+					{
+					    if(c > -10.0)
+						{
+						}
+					}
+			   }
+		   }
+	   }
+   }
+}
