@@ -13,7 +13,8 @@ public:
 	Type::E m_type;
 	unsigned int m_iDimention;
 	std::string m_context_name;
-	CLocalNode *ptrLocal;
+	void *ptrVal;
+	//CLocalNode *ptrLocal;
 	CLocalNode *ptrNext;
 
 	void Save(std::ofstream *file);

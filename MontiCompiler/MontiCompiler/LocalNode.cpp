@@ -16,7 +16,7 @@ void CLocalNode::Save(std::ofstream * file)
 	switch (m_category)
 	{
 	case Category::Global:
-		*file << " {Globa,";
+		*file << " {Global,";
 		break;
 	case Category::Local:
 		*file << " {Local,";
@@ -60,14 +60,12 @@ void CLocalNode::Save(std::ofstream * file)
 
 	*file << m_context_name << ',';
 	*file << m_iDimention << ',';
-	if (ptrLocal != nullptr)
-		ptrLocal->Save(file);
-	else
-		*file << "null,";
-
+	*file << "null,";
 	if (ptrNext != nullptr)
+	{
 		ptrNext->Save(file);
+		*file << "} ";
+	}
 	else
 		*file << "null} ";
-
 }

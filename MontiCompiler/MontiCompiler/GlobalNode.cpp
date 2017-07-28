@@ -67,7 +67,10 @@ void CGlobalNode::Save(std::ofstream *file)
 	else
 		*file << "null,";
 	if (ptrNext != nullptr)
+	{
 		ptrNext->Save(file);
+		*file << "} ";
+	}
 	else
 		*file << "null} ";
 

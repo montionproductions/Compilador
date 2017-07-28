@@ -43,7 +43,6 @@ void CSymbolManager::AddVar(Token target, std::string name, std::string function
 			local->m_type = type;
 			local->m_iDimention = dimension;
 			local->m_context_name = functionName;
-			local->ptrLocal = NULL;
 			local->ptrNext = NULL;
 			global->ptrLocal = local;
 
@@ -61,7 +60,6 @@ void CSymbolManager::AddVar(Token target, std::string name, std::string function
 			local->m_type = type;
 			local->m_iDimention = dimension;
 			local->m_context_name = functionName;
-			local->ptrLocal = NULL;
 			local->ptrNext = NULL;
 			global->ptrLocal = local;
 
@@ -73,9 +71,27 @@ void CSymbolManager::AddVar(Token target, std::string name, std::string function
 	{
 		if (category == Category::Global || category == Category::Process)
 			ErrorManagment->AddError(target.nLine, "<sint>", name, "Redefinición de variable");
-		else if(category == Category::Param)
+		else if (category == Category::Param)
 		{
-
+			if (ptr->ptrLocal == nullptr)
+			{
+				local->m_category = category;
+				local->m_type = type;
+				local->m_iDimention = dimension;
+				local->m_context_name = functionName;
+				local->ptrNext = NULL;
+				//local->ptrNext = NULL;
+				ptr->ptrLocal = local;
+			}
+			if (ptr->ptrLocal->ptrNext == nullptr)
+			{
+				local->m_category = category;
+				local->m_type = type;
+				local->m_iDimention = dimension;
+				local->m_context_name = functionName;
+				local->ptrNext = NULL;
+				ptr->ptrLocal->ptrNext = local;
+			}
 		}
 		else if (category == Category::Local)
 		{
@@ -85,12 +101,19 @@ void CSymbolManager::AddVar(Token target, std::string name, std::string function
 				local->m_type = type;
 				local->m_iDimention = dimension;
 				local->m_context_name = functionName;
-				local->ptrLocal = NULL;
 				local->ptrNext = NULL;
 				ptr->ptrLocal = local;
 			}
-			else
-				ErrorManagment->AddError(target.nLine, "<sint>", name, "Redefinición de variable");
+			else if (ptr->ptrLocal->ptrNext == nullptr)
+			{
+				//ErrorManagment->AddError(target.nLine, "<sint>", name, "Redefinición de variable");
+				local->m_category = category;
+				local->m_type = type;
+				local->m_iDimention = dimension;
+				local->m_context_name = functionName;
+				local->ptrNext = NULL;
+				ptr->ptrLocal->ptrNext = local;
+			}
 		}
 	}
 

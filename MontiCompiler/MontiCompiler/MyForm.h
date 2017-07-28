@@ -26,6 +26,7 @@ namespace MontiCompiler {
 			//TODO: agregar código de constructor aquí
 			//
 		}
+		void UpdateLine();
 
 	protected:
 		/// <summary>
@@ -52,6 +53,14 @@ namespace MontiCompiler {
 	private: System::Windows::Forms::RichTextBox^  richTextBox2;
 	private: System::Windows::Forms::ToolStrip^  toolStrip1;
 	private: System::Windows::Forms::ToolStripButton^  toolStripButton1;
+	private: System::Windows::Forms::ContextMenuStrip^  contextMenuStrip1;
+
+	private: System::Windows::Forms::Label^  label1;
+
+
+
+
+	private: System::ComponentModel::IContainer^  components;
 
 
 
@@ -60,7 +69,7 @@ namespace MontiCompiler {
 		/// <summary>
 		/// Variable del diseñador necesaria.
 		/// </summary>
-		System::ComponentModel::Container ^components;
+
 
 #pragma region Windows Form Designer generated code
 		/// <summary>
@@ -69,6 +78,7 @@ namespace MontiCompiler {
 		/// </summary>
 		void InitializeComponent(void)
 		{
+			this->components = (gcnew System::ComponentModel::Container());
 			System::ComponentModel::ComponentResourceManager^  resources = (gcnew System::ComponentModel::ComponentResourceManager(MyForm::typeid));
 			this->menuStrip1 = (gcnew System::Windows::Forms::MenuStrip());
 			this->archivoToolStripMenuItem = (gcnew System::Windows::Forms::ToolStripMenuItem());
@@ -82,6 +92,8 @@ namespace MontiCompiler {
 			this->richTextBox2 = (gcnew System::Windows::Forms::RichTextBox());
 			this->toolStrip1 = (gcnew System::Windows::Forms::ToolStrip());
 			this->toolStripButton1 = (gcnew System::Windows::Forms::ToolStripButton());
+			this->contextMenuStrip1 = (gcnew System::Windows::Forms::ContextMenuStrip(this->components));
+			this->label1 = (gcnew System::Windows::Forms::Label());
 			this->menuStrip1->SuspendLayout();
 			this->toolStrip1->SuspendLayout();
 			this->SuspendLayout();
@@ -155,21 +167,22 @@ namespace MontiCompiler {
 			this->richTextBox1->BackColor = System::Drawing::Color::White;
 			this->richTextBox1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.78182F, System::Drawing::FontStyle::Regular,
 				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->richTextBox1->Location = System::Drawing::Point(12, 56);
+			this->richTextBox1->Location = System::Drawing::Point(54, 65);
 			this->richTextBox1->Name = L"richTextBox1";
-			this->richTextBox1->Size = System::Drawing::Size(758, 334);
+			this->richTextBox1->Size = System::Drawing::Size(716, 353);
 			this->richTextBox1->TabIndex = 1;
 			this->richTextBox1->Text = L"";
+			this->richTextBox1->VScroll += gcnew System::EventHandler(this, &MyForm::OnVScroll);
 			// 
 			// richTextBox2
 			// 
-			this->richTextBox2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.78182F, System::Drawing::FontStyle::Regular,
-				System::Drawing::GraphicsUnit::Point, static_cast<System::Byte>(0)));
-			this->richTextBox2->Location = System::Drawing::Point(13, 424);
+			this->richTextBox2->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->richTextBox2->Location = System::Drawing::Point(54, 424);
 			this->richTextBox2->Name = L"richTextBox2";
 			this->richTextBox2->ReadOnly = true;
-			this->richTextBox2->Size = System::Drawing::Size(757, 120);
-			this->richTextBox2->TabIndex = 2;
+			this->richTextBox2->Size = System::Drawing::Size(716, 120);
+			this->richTextBox2->TabIndex = 1;
 			this->richTextBox2->Text = L"";
 			// 
 			// toolStrip1
@@ -193,12 +206,30 @@ namespace MontiCompiler {
 			this->toolStripButton1->Text = L"toolStripButton1";
 			this->toolStripButton1->Click += gcnew System::EventHandler(this, &MyForm::toolStripButton1_Click);
 			// 
+			// contextMenuStrip1
+			// 
+			this->contextMenuStrip1->ImageScalingSize = System::Drawing::Size(18, 18);
+			this->contextMenuStrip1->Name = L"contextMenuStrip1";
+			this->contextMenuStrip1->Size = System::Drawing::Size(61, 4);
+			// 
+			// label1
+			// 
+			this->label1->AutoSize = true;
+			this->label1->Font = (gcnew System::Drawing::Font(L"Microsoft Sans Serif", 11.5F, System::Drawing::FontStyle::Regular, System::Drawing::GraphicsUnit::Point,
+				static_cast<System::Byte>(0)));
+			this->label1->Location = System::Drawing::Point(13, 65);
+			this->label1->Name = L"label1";
+			this->label1->Size = System::Drawing::Size(20, 22);
+			this->label1->TabIndex = 2;
+			this->label1->Text = L"0";
+			// 
 			// MyForm
 			// 
 			this->AutoScaleDimensions = System::Drawing::SizeF(6, 13);
 			this->AutoScaleMode = System::Windows::Forms::AutoScaleMode::Font;
 			this->BackColor = System::Drawing::Color::Gray;
 			this->ClientSize = System::Drawing::Size(782, 556);
+			this->Controls->Add(this->label1);
 			this->Controls->Add(this->toolStrip1);
 			this->Controls->Add(this->richTextBox2);
 			this->Controls->Add(this->richTextBox1);
@@ -215,7 +246,6 @@ namespace MontiCompiler {
 
 		}
 #pragma endregion
-
 	private: System::Void salirToolStripMenuItem_Click(System::Object^  sender, System::EventArgs^  e) {
 		Application::Exit();
 	}
@@ -244,7 +274,13 @@ namespace MontiCompiler {
 		if (Compiler.Load("main"))
 		{
 			if (this->richTextBox1->Text == L"")
+			{
 				this->richTextBox1->Text = gcnew String(Compiler.m_formatString.c_str());
+				int d = richTextBox1->GetPositionFromCharIndex(0).Y / 12;
+				label1->Location = Point(label1->Location.X, d + richTextBox1->Location.Y);
+
+				UpdateLine();
+			}
 			else
 			{
 				// Initializes the variables to pass to the MessageBox::Show method.
@@ -275,20 +311,31 @@ namespace MontiCompiler {
 		Compiler.SetString((char*)(void*)Marshal::StringToHGlobalAnsi(this->richTextBox1->Text));
 		Compiler.Save("main");
 	}
-private: System::Void toolStripButton1_Click(System::Object^  sender, System::EventArgs^  e) {
-	Compiler.SetString((char*)(void*)Marshal::StringToHGlobalAnsi(this->richTextBox1->Text));
-	Compiler.ErrorManagment.Clean();
-	Compiler.TokenManagment.Clean();
-	Compiler.SymboolManager.Reset();
-	Compiler.LexicalAnalysis();
-	Compiler.ErrorManagment.Save();
-	Compiler.TokenManagment.Save();
-	this->richTextBox2->Text = L"";
-	for (auto &error : Compiler.ErrorManagment.m_lErrors)
-	{
-		std::string s = error.desc + " Line: " + std::to_string(error.line) + " " + error.text + " " + error.type + "\n";
-		this->richTextBox2->Text += gcnew String(s.c_str());
+	private: System::Void toolStripButton1_Click(System::Object^  sender, System::EventArgs^  e) {
+		Compiler.SetString((char*)(void*)Marshal::StringToHGlobalAnsi(this->richTextBox1->Text));
+		Compiler.ErrorManagment.Clean();
+		Compiler.TokenManagment.Clean();
+		Compiler.SymboolManager.Reset();
+		Compiler.LexicalAnalysis();
+		Compiler.ErrorManagment.Save();
+		Compiler.TokenManagment.Save();
+		this->richTextBox2->Text = L"";
+		for (auto &error : Compiler.ErrorManagment.m_lErrors)
+		{
+			std::string s = error.desc + " Line: " + std::to_string(error.line) + " " + error.text + " " + error.type + "\n";
+			this->richTextBox2->Text += gcnew String(s.c_str());
+		}
 	}
-}
+
+	void OnVScroll(System::Object ^sender, System::EventArgs ^e)
+	{
+		//move location of numberLabel for amount 
+		//of pixels caused by scrollbar
+		int d = richTextBox1->GetPositionFromCharIndex(0).Y %(12 + 1);
+		label1->Location = Point(label1->Location.X, d + richTextBox1->Location.Y);
+
+		UpdateLine();
+	}
+
 };
 }

@@ -127,7 +127,7 @@ void FSM::LexicalAnalysis()
 		case State::UNDEF:
 		{
 			//Token += pts;
-			ErrorManagment.AddError(nLine, "<Lex>", "Expresion sin definicion", Token);
+			ErrorManagment.AddError(nLine, "<Lex>", Token, "Expresion sin definicion");
 			memset(&Token, 0, sizeof(Token));
 			m_String--;
 			state = State::DEFAULT;
@@ -172,10 +172,10 @@ void FSM::LexicalAnalysis()
 		{
 			if (desc == Descriptores::Digit)
 				Token += pts;
-			else if (desc == Descriptores::Undef || desc == Descriptores::Comma)
+			else if (desc == Descriptores::Undef /*|| desc == Descriptores::Comma*/)
 			{
 				Token += pts;
-				ErrorManagment.AddError(nLine, "<Lex>", "Expresion sin definicion", Token);
+				ErrorManagment.AddError(nLine, "<Lex>", Token, "Expresion sin definicion");
 				memset(&Token, 0, sizeof(Token));
 				state = State::DEFAULT;
 			}
