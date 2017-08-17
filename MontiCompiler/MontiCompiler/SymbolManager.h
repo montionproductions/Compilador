@@ -27,6 +27,7 @@ public:
 private:
 	CErrorController *ErrorManagment;
 	TokenController *TokenManagment;
-	std::unordered_map<std::string, CGlobalNode*> HashMap;
+	std::unordered_map<std::string, CGlobalNode*> HashMap; // Tabla de simbolos
+
 };
 

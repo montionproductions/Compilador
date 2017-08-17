@@ -133,8 +133,10 @@
     <ClCompile Include="GlobalNode.cpp" />
     <ClCompile Include="LocalNode.cpp" />
     <ClCompile Include="MyForm.cpp" />
+    <ClCompile Include="STree.cpp" />
     <ClCompile Include="SymbolManager.cpp" />
     <ClCompile Include="TokenController.cpp" />
+    <ClCompile Include="TypeTableManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="EnumNodes.h" />
@@ -146,8 +148,10 @@
       <FileType>CppForm</FileType>
     </ClInclude>
     <ClInclude Include="States.h" />
+    <ClInclude Include="STree.h" />
     <ClInclude Include="SymbolManager.h" />
     <ClInclude Include="TokenController.h" />
+    <ClInclude Include="TypeTableManager.h" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MyForm.resx">

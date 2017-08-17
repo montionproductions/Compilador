@@ -64,12 +64,20 @@ namespace IDToken
 {
 	enum E
 	{
-		ID,
-		KEYWORD,
-		INT,
+		/*
+		FLOAT = 666,
+		INT = 667,
+		STRING = 668,
+		BOOLEAN = 669,
+		INDEF = 670
+		*/
 		FLOAT,
+		INT,
 		STRING,
 		BOOLEAN,
+		INDEF,
+		ID,
+		KEYWORD,
 		DELIMITER,
 		RELATIONSHIP_OP,
 		ASSIGNATION,

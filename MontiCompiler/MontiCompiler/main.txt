@@ -1,25 +1,9 @@
-var x, w[5] : float;
-
-procedure X()
-{
-    var x,s:int;
-}
-
-function volCyl(x, radio : float) : float
-{
-    var s:float;
-}
+var a : float;
 
 main()
 {
-    var w : string;
-}
+while(1.0)
+{
 
-/*
-s, INDEF, INDEF, 0, 0, { VAR_LOCAL, INT, 0, X, 0, { VAR_LOCAL, FLOAT, 0, volCyl, 0, 0 }}, 0
-x, VAR_GLOBAL, FLOAT, 0, 0, { VAR_LOCAL, INT, 0, X, 0, { PARAM, FLOAT, 0, volCyl, 0, 0 }}, 0
-X, PROC, INDEF, 0, 0, 0, 0
-radio, INDEF, INDEF, 0, 0, { PARAM, FLOAT, 0, volCyl, 0, 0 }, 0
-w, VAR_GLOBAL, FLOAT, 5, 0, { VAR_LOCAL, STRING, 0, main, 0, 0 }, 0
-volCyl, FUNC, FLOAT, 0, 0, 0, 0
-*/ 
+}
+} 

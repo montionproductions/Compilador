@@ -10,14 +10,6 @@
 #include "States.h"
 #include "EnumNodes.h"
 
-struct Token
-{
-	std::string Desc;
-	std::string Type;
-
-	IDToken::E ID;
-	int nLine;
-};
 class TokenController
 {
 public:
