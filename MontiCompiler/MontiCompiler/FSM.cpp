@@ -442,9 +442,10 @@ void FSM::SintacticalAnalisis()
 				else
 					ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "se espetaba un (");
 
-				
-				while (target.Desc != ")")
+				int limit = 10;
+				while (target.Desc != ")" && limit > 0)
 				{
+					limit--;
 					Var(target, Context, name);
 					if(target.Desc != ")")
 						target = TokenManagment.NextToken();
@@ -960,8 +961,10 @@ void FSM::Var(Token &target, Category::E Context, std::string FunctionName)
 
 	int lastPoint = 0;
 
-	while (target.Desc != ";" && target.Desc != ")")
+	int limit = 20;
+	while (target.Desc != ";" && target.Desc != ")" && limit > 0)
 	{
+		limit--;
 		lastPoint = TokenManagment.indexToken;
 		target = TokenManagment.NextToken();
 	}
@@ -979,7 +982,7 @@ void FSM::Var(Token &target, Category::E Context, std::string FunctionName)
 	else {
 		ErrorManagment.AddError(target.nLine, "<sint>", target.Desc, "se esperaba un tipo");
 		type = Type::INDEF;
-		TokenManagment.PanicMode(";");
+		target = TokenManagment.PanicMode(";)");
 	}
 
 	if (type != Type::INDEF)
@@ -987,8 +990,10 @@ void FSM::Var(Token &target, Category::E Context, std::string FunctionName)
 		target = TokenManagment.GetToken(firstPoint);
 		TokenManagment.indexToken = firstPoint + 1;
 
-		while (target.Desc != ":" && target.Desc != ";" && target.Desc != ")")
+		int limit = 20;
+		while (target.Desc != ":" && target.Desc != ";" && target.Desc != ")" && limit > 0)
 		{
+			limit--;
 			if (target.ID == IDToken::ID)
 			{
 				std::string name;

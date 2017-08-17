@@ -1,5 +1,10 @@
-5a 7 se asigno tipo invalido <sem>
-a 7 se asigno tipo invalido <sem>
-a 7 se asigno tipo invalido <sem>
-a 7 se asigno tipo invalido <sem>
-a 7 se asigno tipo invalido <sem>
+10, 1 se esperaba un ID <sint>
+d 2 se esperaba un tipo <sint>
+a 4 Redefinición de variable <sint>
+- 5 Dimension no valida <sint>
+- 5 Debes cerrar el corchete <sint>
+int 5 este elemento no es ninguno de los que se esperan <sint>
+return 15 procedureno debe tener retorno <sint>
+b 19 se esperaba un tipo <sint>
+9.0 29 se esperaba un int <sint>
+default 35 este elemento no es ninguno de los que se esperan <sint>

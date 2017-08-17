@@ -107,11 +107,28 @@ Token TokenController::PreviousToken()
 Token TokenController::PanicMode(std::string element)
 {
 	Token aux = NextToken();
-	while (aux.Desc != element)
+	int limit = 10;
+	if (element.size() > 1)
 	{
-		aux = NextToken();
+		char c1 = element[0];
+		char c2 = element[1];
+		while (aux.Desc[0] != c1 && aux.Desc[0] != c2 && limit > 0)
+		{
+			limit--;
+			aux = NextToken();
+		}
+		return aux;
 	}
-	return aux;
+	else
+	{
+		while (aux.Desc != element && limit > 0)
+		{
+			limit--;
+			aux = NextToken();
+		}
+		return aux;
+	}
+
 }
 
 Token TokenController::GetToken(int index)

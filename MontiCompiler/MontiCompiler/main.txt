@@ -1,9 +1,124 @@
-var a : float;
+var, a, b, c: int; /* ERROR, se esperaba ID */
+var d; /* ERROR, se esperaba tipo */
+var e, f : float;
+var a : bool; /* ERROR, variable global ya definida */
+var g[10], h[-1] : int; /* ERROR, indice debe ser mayor o igual a cero */
 
-main()
+/* */
+procedure uno()
 {
-while(1.0)
-{
+    var a : bool;
+	a = true; /* OK, debe tomar la variable local y no global */
 
+	e = 100.0;
+	
+    return; /* ERROR: procedimientos no deben tener 'return' */
 }
+
+/* */
+procedure dos(a : float, bool b) /* ERROR: se esperaba ID */
+{
+    switch(c)
+	{
+	    4:{
+		    f = a * -1.0;
+		}
+		5:{
+		    f = a * 10.0;
+		}
+		9.0:{ /* ERROR, el tipo no coincide con el switch */
+		    if(b)
+			{
+		        f = a * 100.0;
+			}
+		}
+		default:{
+		    f = 1000.0;
+		}		
+	}
+}
+
+/* */
+function func1() : int
+{
+    var total : float;
+	total = e + f;
+	
+    return ((a * 10) + total); /* ERROR: tipos de la expresion no son los mismos */
+}
+
+/* */
+function func2() /* ERROR: funciones deben tener un tipo de retorno */
+{
+    var x : int;
+	var y, z : float;
+	
+	x = 1;
+	y = 2.0;
+	z = true; /* ERROR: tipos incompatibles en asignacion */
+	x = x + 1; 
+	y = y * z;
+	z = x * y; /* ERROR: tipos incompatibles en asignacion */
+}
+
+/* */
+function func3(param1 : float) : float
+{
+    var g : float;
+	
+    if(g > 0.0) 
+	{
+	   g = 200.0;
+       return; /* ERROR: se esperaba tipo */
+	}
+	else
+	{
+	    g = 100.0;
+	}
+	
+	return (((e*f)+(f-param1))*(e*g));
+}
+
+/* */
+function func4() : bool
+{
+    if() /* ERROR: se esperaba una EXPRESION */
+	{
+	}
+
+    /* ERROR: las funciones deben tener tipo de retorno */
+}
+
+main ()
+{
+    var x : int;
+	
+    a = false; /* ERROR: tipo de datos incompatibles */
+	a = w; /* ERROR: no existe ID w */
+	g[0] = 1;
+	g[1] = 2;
+	g[3] = 3;
+	g[4] = 4;
+	g[5] = 5;
+
+	uno(x); /* ERROR: el procedimiento espera 0 parametros */
+	dos();  /* ERROR: el procedimiento espera 2 parametros */
+	dos(x, false); /* ERROR: el tipo de datos de los parametros no concuerda */
+	tres(); /* ERROR: procedimiento o funcion no definido */
+	g[6] = uno(); /* ERROR: la asignacion no es compatible porque el procedimiento no tiene valor de retorno */
+	g[6] = func1();
+	g[7] = func2();
+	g[8] = func3(100.0);
+	func4();
+	
+	if((g[0] + g[5]) > 10)
+	{
+	    g[0] = 283764.4; /* ERROR: tipos incompatibles en asignacion */
+	}
+	if((g[0] + g[9]) > 10) /* ERROR: g[9] no ha sido inicializado */
+	{
+	    g[0] = 22222;
+	}
+	
+    return 0; /* ERROR, 'main' no debe tener return */
 } 
