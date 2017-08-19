@@ -136,7 +136,7 @@ void CSymbolManager::SetControllers(CErrorController *errorManager, TokenControl
 
 bool CSymbolManager::Save()
 {
-	std::ofstream myfile;
+	/*std::ofstream myfile;
 
 	myfile.open("Simbolos.symb", std::ios::binary);
 	if (myfile.is_open())
@@ -152,7 +152,8 @@ bool CSymbolManager::Save()
 		myfile.close();
 	}
 	else
-		return true;
+		return true;*/
+	return false;
 }
 
 void CSymbolManager::Reset()

@@ -314,7 +314,6 @@ void CTypeTableManager::CheckTypes()
 {
 	for (auto &elemen : Elements)
 	{
-		
 		if (GetExpresion(elemen.first).size() > 0)
 		{
 			for (auto exp : GetExpresion(elemen.first))
